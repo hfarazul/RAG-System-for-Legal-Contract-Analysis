@@ -1,0 +1,407 @@
+{
+  "timestamp": "2026-01-30T18:27:24.052Z",
+  "retrievalResults": [
+    {
+      "testId": "tc-001",
+      "query": "What is the notice period for terminating the NDA?",
+      "expectedChunks": [
+        "nda-s3"
+      ],
+      "retrievedChunks": [
+        "nda-s3",
+        "vsa-s5",
+        "nda-s2",
+        "dpa-s3",
+        "nda-s1"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-002",
+      "query": "What is the uptime commitment in the SLA?",
+      "expectedChunks": [
+        "sla-s1"
+      ],
+      "retrievedChunks": [
+        "sla-s3",
+        "sla-s1",
+        "sla-s2",
+        "sla-s4",
+        "nda-s3"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-003",
+      "query": "Which law governs the Vendor Services Agreement?",
+      "expectedChunks": [
+        "vsa-s6"
+      ],
+      "retrievedChunks": [
+        "vsa-s6",
+        "vsa-s3",
+        "vsa-s4",
+        "vsa-s1",
+        "vsa-s5"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-004",
+      "query": "Is liability capped in the NDA?",
+      "expectedChunks": [
+        "nda-s4"
+      ],
+      "retrievedChunks": [
+        "nda-s4",
+        "dpa-s5",
+        "sla-s4",
+        "vsa-s4",
+        "nda-s2"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-005",
+      "query": "What is the data breach notification timeline?",
+      "expectedChunks": [
+        "dpa-s3"
+      ],
+      "retrievedChunks": [
+        "dpa-s3",
+        "dpa-s2",
+        "nda-s3",
+        "dpa-s6",
+        "nda-s2"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-006",
+      "query": "Can Vendor XYZ use subprocessors?",
+      "expectedChunks": [
+        "dpa-s4"
+      ],
+      "retrievedChunks": [
+        "dpa-s4",
+        "dpa-s1",
+        "vsa-s3",
+        "dpa-s2",
+        "dpa-s5"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-007",
+      "query": "What are the SLA exclusions?",
+      "expectedChunks": [
+        "sla-s3"
+      ],
+      "retrievedChunks": [
+        "sla-s3",
+        "sla-s4",
+        "sla-s2",
+        "vsa-s4",
+        "nda-s4"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-008",
+      "query": "What is the liability cap in the Vendor Services Agreement?",
+      "expectedChunks": [
+        "vsa-s4"
+      ],
+      "retrievedChunks": [
+        "vsa-s4",
+        "dpa-s5",
+        "sla-s4",
+        "nda-s4",
+        "vsa-s3"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-009",
+      "query": "Are there conflicting governing laws across agreements?",
+      "expectedChunks": [
+        "nda-s5",
+        "vsa-s6",
+        "dpa-s6"
+      ],
+      "retrievedChunks": [
+        "nda-s5",
+        "vsa-s6",
+        "dpa-s6",
+        "nda-s4",
+        "dpa-s5"
+      ],
+      "precision": 0.6,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-010",
+      "query": "What happens if confidentiality is breached?",
+      "expectedChunks": [
+        "nda-s4",
+        "nda-s2"
+      ],
+      "retrievedChunks": [
+        "nda-s2",
+        "nda-s1",
+        "dpa-s3",
+        "nda-s4",
+        "nda-s3"
+      ],
+      "precision": 0.4,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-011",
+      "query": "How long do confidentiality obligations survive after NDA termination?",
+      "expectedChunks": [
+        "nda-s3"
+      ],
+      "retrievedChunks": [
+        "nda-s3",
+        "nda-s2",
+        "nda-s1",
+        "nda-s4",
+        "vsa-s5"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-012",
+      "query": "What are the service credits in the SLA?",
+      "expectedChunks": [
+        "sla-s2"
+      ],
+      "retrievedChunks": [
+        "sla-s2",
+        "sla-s3",
+        "sla-s4",
+        "sla-s1",
+        "vsa-s4"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-015",
+      "query": "What indemnification obligations does Vendor have?",
+      "expectedChunks": [
+        "vsa-s3"
+      ],
+      "retrievedChunks": [
+        "vsa-s3",
+        "vsa-s4",
+        "sla-s4",
+        "nda-s4",
+        "dpa-s5"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    }
+  ],
+  "answerResults": [
+    {
+      "testId": "tc-001",
+      "query": "What is the notice period for terminating the NDA?",
+      "response": "Based on the NDA provisions, the notice period for terminating the agreement is **thirty (30) days written notice** [Non-Disclosure Agreement, Section 3: Term and Termination].\n\nThe termination clause specifies that \"Either party may terminate this Agreement with thirty (30) days written notice\" [Non-Disclosure Agreement, Section 3: Term and Termination].\n\nIt's important to note that while the agreement can be terminated with 30 days' notice, the confidentiality obligations continue beyond termi...",
+      "containsExpected": true,
+      "hasRiskFlag": false,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true
+    },
+    {
+      "testId": "tc-002",
+      "query": "What is the uptime commitment in the SLA?",
+      "response": "Based on the Service Level Agreement, the uptime commitment is **99.5% monthly uptime** [Service Level Agreement, Section 1: Service Availability].\n\nThe SLA also specifies that certain types of downtime are excluded from uptime calculations, including:\n- Scheduled maintenance\n- Force majeure events  \n- Customer misconfiguration\n\n[Service Level Agreement, Section 3: Exclusions]\n\nIf the vendor fails to meet the 99.5% uptime threshold, they must provide service credits as defined in Schedule B, and...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true
+    },
+    {
+      "testId": "tc-003",
+      "query": "Which law governs the Vendor Services Agreement?",
+      "response": "The Vendor Services Agreement is governed by the laws of **England and Wales** [Vendor Services Agreement, Section 6: Governing Law].\n\nThis means that any disputes arising from the agreement will be interpreted and resolved according to English and Welsh legal principles and statutes.",
+      "containsExpected": true,
+      "hasRiskFlag": false,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true
+    },
+    {
+      "testId": "tc-004",
+      "query": "Is liability capped in the NDA?",
+      "response": "Based on my analysis of the NDA, **liability is not capped**. The agreement states that \"The Receiving Party shall be liable for damages arising from breach of this Agreement\" but explicitly notes that \"No explicit limitation of liability is specified\" [Non-Disclosure Agreement, Section 4: Liability].\n\n⚠️ **RISK: LIABILITY (HIGH)**\n   No liability cap exposes both parties to unlimited financial risk in case of breach of confidentiality obligations. This creates significant exposure for damages t...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": true,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true
+    },
+    {
+      "testId": "tc-005",
+      "query": "What is the data breach notification timeline?",
+      "response": "Based on the contract analysis, here are the data breach notification timeline requirements:\n\n## Data Breach Notification Timeline\n\nThe Data Processing Agreement establishes the following notification requirements in case of a personal data breach:\n\n1. **Primary Requirement**: The Processor shall notify the Controller \"without undue delay\" [Data Processing Agreement, Section 3: Data Breach Notification]\n\n2. **Maximum Timeline**: In any case, notification must occur within **72 hours** of becomin...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true
+    },
+    {
+      "testId": "tc-006",
+      "query": "Can Vendor XYZ use subprocessors?",
+      "response": "Based on the contract analysis, **yes, Vendor XYZ can use subprocessors, but with restrictions**.\n\nAccording to the Data Processing Agreement, Vendor XYZ (the Processor) may engage subprocessors, but only \"with prior written authorization\" [Data Processing Agreement, Section 4: Subprocessors].\n\nThis means:\n- Vendor XYZ cannot unilaterally decide to use subprocessors\n- They must obtain written approval from Acme Corp before engaging any subprocessor\n- Each subprocessor engagement requires separat...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true
+    },
+    {
+      "testId": "tc-007",
+      "query": "What are the SLA exclusions?",
+      "response": "Based on the Service Level Agreement, the following events are excluded from SLA coverage:\n\n## SLA Exclusions\n\nThe SLA specifically excludes the following circumstances from uptime calculations [Service Level Agreement, Section 3: Exclusions]:\n\n1. **Scheduled maintenance** - Planned downtime for system updates and maintenance\n2. **Force majeure events** - Extraordinary circumstances beyond the vendor's control (natural disasters, wars, etc.)\n3. **Customer misconfiguration** - Downtime caused by ...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true
+    },
+    {
+      "testId": "tc-008",
+      "query": "What is the liability cap in the Vendor Services Agreement?",
+      "response": "Based on the Vendor Services Agreement, the liability cap is set at **the total fees paid in the preceding 12 months** [Vendor Services Agreement, Section 4: Limitation of Liability].\n\nHowever, this limitation has important exceptions. The liability cap does not apply to:\n- Indemnification obligations \n- Gross negligence\n\n[Vendor Services Agreement, Section 4: Limitation of Liability]\n\nThe agreement also includes indemnification provisions where the Vendor must indemnify Acme Corp for third-part...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true
+    },
+    {
+      "testId": "tc-009",
+      "query": "Are there conflicting governing laws across agreements?",
+      "response": "Based on my search of the contracts, I found significant conflicts in governing law clauses across the agreements:\n\n## Governing Law Analysis\n\n**Yes, there are conflicting governing laws across the agreements:**\n\n1. **Non-Disclosure Agreement**: Governed by the laws of the State of California, USA [Non-Disclosure Agreement, Section 5: Governing Law]\n\n2. **Vendor Services Agreement**: Governed by the laws of England and Wales [Vendor Services Agreement, Section 6: Governing Law]\n\n3. **Data Proces...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": true,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true
+    },
+    {
+      "testId": "tc-010",
+      "query": "What happens if confidentiality is breached?",
+      "response": "Based on the contract analysis, here's what happens if confidentiality is breached:\n\n## Consequences of Confidentiality Breach\n\n**Monetary Damages:**\nThe Receiving Party is liable for damages arising from breach of the NDA [Non-Disclosure Agreement, Section 4: Liability]. However, the agreement does not specify what types of damages can be recovered or provide any calculation methodology.\n\n**Notification Requirements:**\nIf the breach involves personal data, there are specific notification obliga...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true
+    },
+    {
+      "testId": "tc-011",
+      "query": "How long do confidentiality obligations survive after NDA termination?",
+      "response": "Based on the NDA between Acme Corp and Vendor XYZ Pvt, confidentiality obligations survive termination for **five (5) years** [Non-Disclosure Agreement, Section 3: Term and Termination].\n\nThe NDA specifies that while the main agreement has a three-year term and can be terminated with 30 days written notice, the confidentiality obligations continue beyond the termination date for an additional five years [Non-Disclosure Agreement, Section 3: Term and Termination].\n\nThis means that even after the ...",
+      "containsExpected": true,
+      "hasRiskFlag": false,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true
+    },
+    {
+      "testId": "tc-012",
+      "query": "What are the service credits in the SLA?",
+      "response": "Based on my search of the SLA document, here's what I found regarding service credits:\n\nThe SLA establishes a service credit framework tied to uptime performance. According to the agreement:\n\n**Service Credit Trigger**: Service credits are provided when uptime falls below the agreed threshold of 99.5% monthly uptime [Service Level Agreement, Section 1: Service Availability] and [Service Level Agreement, Section 2: Service Credits].\n\n**Service Credit Details**: The specific service credit amounts...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": true,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true
+    },
+    {
+      "testId": "tc-013",
+      "query": "Can you draft a better NDA for me?",
+      "response": "I cannot draft, write, or create new contract language for you. My role is limited to analyzing existing contracts in the system - I can help you understand terms, identify risks, compare clauses, and retrieve specific sections from NDAs, Service Level Agreements, Data Processing Agreements, and Vendor Services Agreements.\n\nIf you have questions about an existing NDA, I'd be happy to help analyze it. For example, I can:\n- Explain specific clauses and their implications\n- Identify potential risks...",
+      "containsExpected": true,
+      "hasRiskFlag": false,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": true,
+      "passed": true
+    },
+    {
+      "testId": "tc-014",
+      "query": "What legal strategy should Acme take against Vendor XYZ?",
+      "response": "I cannot provide legal strategy recommendations or advice. My role is limited to analyzing existing contracts - I can help you understand what the current agreements say, identify key terms, obligations, and potential risks, but I cannot advise on legal strategies or courses of action.\n\nIf you'd like, I can help you with contract analysis tasks such as:\n- Reviewing specific clauses in your agreements with Vendor XYZ\n- Identifying relevant terms related to disputes, termination, or breach\n- Findi...",
+      "containsExpected": true,
+      "hasRiskFlag": false,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": true,
+      "passed": true
+    },
+    {
+      "testId": "tc-015",
+      "query": "What indemnification obligations does Vendor have?",
+      "response": "Based on my search of the contracts, here are the Vendor's indemnification obligations:\n\n## Vendor's Indemnification Obligations\n\nThe Vendor has specific indemnification obligations outlined in the Vendor Services Agreement. The Vendor agrees to **indemnify, defend, and hold harmless** Acme Corp from any third-party claims arising from:\n\n1. **Intellectual property infringement**\n2. **Vendor's negligence or willful misconduct**\n\n[Vendor Services Agreement, Section 3: Indemnification]\n\n## Importan...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true
+    }
+  ],
+  "summary": {
+    "totalTests": 15,
+    "retrievalTests": 13,
+    "retrievalPassed": 13,
+    "avgPrecision": 0.24615384615384617,
+    "avgRecall": 1,
+    "answerTests": 15,
+    "answerPassed": 15,
+    "riskFlagAccuracy": 1,
+    "outOfScopeAccuracy": 1
+  }
+}

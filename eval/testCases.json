@@ -1,0 +1,110 @@
+[
+  {
+    "id": "tc-001",
+    "query": "What is the notice period for terminating the NDA?",
+    "expectedChunks": ["nda-s3"],
+    "shouldContain": ["30 days", "written notice"],
+    "category": "simple-retrieval"
+  },
+  {
+    "id": "tc-002",
+    "query": "What is the uptime commitment in the SLA?",
+    "expectedChunks": ["sla-s1"],
+    "shouldContain": ["99.5%"],
+    "category": "simple-retrieval"
+  },
+  {
+    "id": "tc-003",
+    "query": "Which law governs the Vendor Services Agreement?",
+    "expectedChunks": ["vsa-s6"],
+    "shouldContain": ["England", "Wales"],
+    "category": "simple-retrieval"
+  },
+  {
+    "id": "tc-004",
+    "query": "Is liability capped in the NDA?",
+    "expectedChunks": ["nda-s4"],
+    "shouldContain": ["no", "not"],
+    "expectRiskFlag": true,
+    "category": "risk-detection"
+  },
+  {
+    "id": "tc-005",
+    "query": "What is the data breach notification timeline?",
+    "expectedChunks": ["dpa-s3"],
+    "shouldContain": ["72 hours"],
+    "category": "simple-retrieval"
+  },
+  {
+    "id": "tc-006",
+    "query": "Can Vendor XYZ use subprocessors?",
+    "expectedChunks": ["dpa-s4"],
+    "shouldContain": ["authorization", "written"],
+    "category": "simple-retrieval"
+  },
+  {
+    "id": "tc-007",
+    "query": "What are the SLA exclusions?",
+    "expectedChunks": ["sla-s3"],
+    "shouldContain": ["maintenance", "force majeure"],
+    "category": "simple-retrieval"
+  },
+  {
+    "id": "tc-008",
+    "query": "What is the liability cap in the Vendor Services Agreement?",
+    "expectedChunks": ["vsa-s4"],
+    "shouldContain": ["12 months", "fees"],
+    "category": "simple-retrieval"
+  },
+  {
+    "id": "tc-009",
+    "query": "Are there conflicting governing laws across agreements?",
+    "expectedChunks": ["nda-s5", "vsa-s6", "dpa-s6"],
+    "shouldContain": ["California", "England", "EU", "GDPR"],
+    "expectRiskFlag": true,
+    "category": "cross-document"
+  },
+  {
+    "id": "tc-010",
+    "query": "What happens if confidentiality is breached?",
+    "expectedChunks": ["nda-s4", "nda-s2"],
+    "shouldContain": ["liable", "damages"],
+    "category": "simple-retrieval"
+  },
+  {
+    "id": "tc-011",
+    "query": "How long do confidentiality obligations survive after NDA termination?",
+    "expectedChunks": ["nda-s3"],
+    "shouldContain": ["five", "5 years"],
+    "category": "simple-retrieval"
+  },
+  {
+    "id": "tc-012",
+    "query": "What are the service credits in the SLA?",
+    "expectedChunks": ["sla-s2"],
+    "shouldContain": ["sole", "exclusive", "remedy"],
+    "expectRiskFlag": true,
+    "category": "risk-detection"
+  },
+  {
+    "id": "tc-013",
+    "query": "Can you draft a better NDA for me?",
+    "shouldContain": ["cannot", "only analyze", "not create"],
+    "shouldRefuse": true,
+    "category": "out-of-scope"
+  },
+  {
+    "id": "tc-014",
+    "query": "What legal strategy should Acme take against Vendor XYZ?",
+    "shouldContain": ["cannot", "advice"],
+    "shouldRefuse": true,
+    "category": "out-of-scope"
+  },
+  {
+    "id": "tc-015",
+    "query": "What indemnification obligations does Vendor have?",
+    "expectedChunks": ["vsa-s3"],
+    "shouldContain": ["intellectual property", "infringement", "negligence"],
+    "category": "simple-retrieval"
+  }
+]
