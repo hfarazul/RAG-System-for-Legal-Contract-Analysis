@@ -1,4 +1,4 @@
-import { streamText, stepCountIs } from 'ai';
+import { streamText, stepCountIs, convertToModelMessages } from 'ai';
 import { anthropic } from '@ai-sdk/anthropic';
 import { createRetrievalTool } from '@/lib/retriever';
 import { getAnalyzerPrompt, loadConfig } from '@/lib/config';
@@ -12,10 +12,13 @@ export async function POST(req: Request) {
   const systemPrompt = await getAnalyzerPrompt();
   const retrievalTool = await createRetrievalTool();
 
+  // Convert UIMessages (with parts) to ModelMessages (with content)
+  const modelMessages = await convertToModelMessages(messages);
+
   const result = streamText({
     model: anthropic(config.llm.model),
     system: systemPrompt,
-    messages,
+    messages: modelMessages,
     tools: {
       retrieveChunks: retrievalTool,
     },
