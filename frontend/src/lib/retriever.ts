@@ -29,12 +29,12 @@ export async function createRetrievalTool() {
 
   return tool({
     description: 'Search legal documents for relevant clauses and sections based on a query. Use this tool to find specific contract terms, obligations, liabilities, and other legal provisions.',
-    parameters: z.object({
+    inputSchema: z.object({
       query: z.string().describe('The search query to find relevant document sections'),
       docType: z.string().optional().describe('Filter by document type: NDA, SLA, DPA, VSA'),
       topK: z.number().optional().default(5).describe('Number of results to return'),
     }),
-    execute: async ({ query, docType, topK }) => {
+    execute: async ({ query, docType, topK }: { query: string; docType?: string; topK?: number }) => {
       // Embed the query
       const { embedding } = await embed({
         model: openai.embedding(config.embedding.model),
