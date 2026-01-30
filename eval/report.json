@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-01-30T19:35:02.748Z",
+  "timestamp": "2026-01-30T21:17:47.024Z",
   "retrievalResults": [
     {
       "testId": "tc-001",
@@ -295,19 +295,271 @@
       "precision": 0.2,
       "recall": 0.25,
       "passed": false
+    },
+    {
+      "testId": "tc-020",
+      "query": "What is the liabiity cap in the VSA?",
+      "expectedChunks": [
+        "vsa-s4"
+      ],
+      "retrievedChunks": [
+        "vsa-s4",
+        "dpa-s5",
+        "sla-s4",
+        "nda-s4",
+        "sla-s2"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-021",
+      "query": "confidentaiity obligations?",
+      "expectedChunks": [
+        "nda-s2"
+      ],
+      "retrievedChunks": [
+        "nda-s2",
+        "nda-s4",
+        "nda-s1",
+        "nda-s3",
+        "dpa-s5"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-022",
+      "query": "Liability?",
+      "expectedChunks": [
+        "nda-s4",
+        "vsa-s4"
+      ],
+      "retrievedChunks": [
+        "nda-s4",
+        "sla-s4",
+        "vsa-s4",
+        "dpa-s5",
+        "vsa-s3"
+      ],
+      "precision": 0.4,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-023",
+      "query": "Who indemnifies whom?",
+      "expectedChunks": [
+        "vsa-s3"
+      ],
+      "retrievedChunks": [
+        "vsa-s3",
+        "nda-s4",
+        "vsa-s4",
+        "sla-s4",
+        "dpa-s5"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-024",
+      "query": "What's the explicit liability limit in the NDA?",
+      "expectedChunks": [
+        "nda-s4"
+      ],
+      "retrievedChunks": [
+        "nda-s4",
+        "dpa-s5",
+        "vsa-s4",
+        "sla-s4",
+        "nda-s2"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-025",
+      "query": "Which agreements do NOT have liability caps?",
+      "expectedChunks": [
+        "nda-s4"
+      ],
+      "retrievedChunks": [
+        "dpa-s5",
+        "nda-s4",
+        "vsa-s4",
+        "sla-s4",
+        "vsa-s3"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-026",
+      "query": "Compare termination notice periods across all agreements",
+      "expectedChunks": [
+        "nda-s3",
+        "vsa-s5"
+      ],
+      "retrievedChunks": [
+        "vsa-s5",
+        "nda-s3",
+        "dpa-s3",
+        "vsa-s4",
+        "sla-s3"
+      ],
+      "precision": 0.4,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-027",
+      "query": "What conflicts exist between the agreements?",
+      "expectedChunks": [
+        "nda-s5",
+        "vsa-s6",
+        "dpa-s6"
+      ],
+      "retrievedChunks": [
+        "vsa-s3",
+        "sla-s3",
+        "nda-s4",
+        "nda-s5",
+        "dpa-s6"
+      ],
+      "precision": 0.4,
+      "recall": 0.6666666666666666,
+      "passed": true
+    },
+    {
+      "testId": "tc-028",
+      "query": "How do liability caps differ across documents?",
+      "expectedChunks": [
+        "nda-s4",
+        "vsa-s4",
+        "dpa-s5"
+      ],
+      "retrievedChunks": [
+        "dpa-s5",
+        "nda-s4",
+        "vsa-s4",
+        "sla-s4",
+        "nda-s5"
+      ],
+      "precision": 0.6,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-029",
+      "query": "What are the indemnification obligations in the VSA?",
+      "expectedChunks": [
+        "vsa-s3"
+      ],
+      "retrievedChunks": [
+        "vsa-s3",
+        "vsa-s4",
+        "sla-s4",
+        "nda-s4",
+        "dpa-s5"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-030",
+      "query": "Is the DPA GDPR compliant?",
+      "expectedChunks": [
+        "dpa-s3",
+        "dpa-s6"
+      ],
+      "retrievedChunks": [
+        "dpa-s6",
+        "dpa-s2",
+        "dpa-s3",
+        "dpa-s5",
+        "dpa-s1"
+      ],
+      "precision": 0.4,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-031",
+      "query": "Are there financial penalties for SLA violations?",
+      "expectedChunks": [
+        "sla-s2"
+      ],
+      "retrievedChunks": [
+        "sla-s2",
+        "sla-s4",
+        "sla-s3",
+        "vsa-s4",
+        "nda-s4"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-032",
+      "query": "What are the operational risks in the SLA exclusions?",
+      "expectedChunks": [
+        "sla-s3"
+      ],
+      "retrievedChunks": [
+        "sla-s3",
+        "sla-s4",
+        "sla-s2",
+        "vsa-s4",
+        "nda-s4"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-033",
+      "query": "Is Acme exposed to unlimited liability anywhere?",
+      "expectedChunks": [
+        "nda-s4"
+      ],
+      "retrievedChunks": [
+        "nda-s4",
+        "sla-s4",
+        "vsa-s4",
+        "dpa-s5",
+        "nda-s5"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
     }
   ],
   "answerResults": [
     {
       "testId": "tc-001",
       "query": "What is the notice period for terminating the NDA?",
-      "response": "The notice period for terminating the NDA is **thirty (30) days written notice** [Non-Disclosure Agreement, Section 3: Term and Termination]. Either party may terminate the agreement with this notice period.\n\n⚠️ CONFLICT: MEDIUM\n   Different termination notice periods exist across agreements:\n   - NDA: 30 days written notice [NDA, Section 3: Term and Termination]\n   - VSA: 60 days written notice for convenience termination [VSA, Section 5: Termination]\n   \n   This inconsistency could create conf...",
+      "response": "The notice period for terminating the NDA is **thirty (30) days written notice** [Non-Disclosure Agreement, Section 3: Term and Termination].\n\nThe NDA allows either party to terminate the agreement with this 30-day notice period. It's worth noting that while the agreement can be terminated, the confidentiality obligations survive termination for five (5) years [Non-Disclosure Agreement, Section 3: Term and Termination].\n\n⚠️ CONFLICT: MEDIUM\n   Different termination notice periods exist across ag...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": false,
       "refusedCorrectly": true,
       "shouldRefuse": false,
-      "passed": true
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 3,
+        "citationAccuracy": 1,
+        "reasoning": "The response provides a specific notice period for terminating the NDA, but this information is not supported by the retrieved context, which is undefined. Therefore, the response is not faithful to the provided data. While the response is relevant to the question, it lacks completeness due to the absence of verifiable information. The citation accuracy is poor as the cited sections do not contain any content to support the claims made."
+      }
     },
     {
       "testId": "tc-002",
@@ -318,62 +570,104 @@
       "expectRiskFlag": false,
       "refusedCorrectly": true,
       "shouldRefuse": false,
-      "passed": true
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 3,
+        "citationAccuracy": 1,
+        "reasoning": "The response provides specific details about the uptime commitment and related terms, but these details are not supported by the retrieved context, which is undefined. Therefore, the response is not faithful to the provided context, and the citations do not match any content. The response is relevant and complete in addressing the question, but the lack of supporting context affects its overall accuracy."
+      }
     },
     {
       "testId": "tc-003",
       "query": "Which law governs the Vendor Services Agreement?",
-      "response": "The Vendor Services Agreement is governed by the **laws of England and Wales** [Vendor Services Agreement, Section 6: Governing Law].\n\n⚠️ CONFLICT: HIGH\n   The agreements have different governing laws which may create jurisdictional conflicts:\n   - NDA: California, USA [Non-Disclosure Agreement, Section 5: Governing Law]\n   - VSA: England and Wales [Vendor Services Agreement, Section 6: Governing Law]  \n   - DPA: European Union (GDPR) and local member state law [Data Processing Agreement, Sectio...",
+      "response": "The Vendor Services Agreement is governed by the **laws of England and Wales** [Vendor Services Agreement, Section 6: Governing Law].\n\n⚠️ CONFLICT: HIGH\n   The agreements have different governing laws which may create jurisdictional conflicts and complicate dispute resolution:\n   - NDA: California, USA [Non-Disclosure Agreement, Section 5: Governing Law]\n   - VSA: England and Wales [Vendor Services Agreement, Section 6: Governing Law]  \n   - DPA: European Union (GDPR) and local member state law ...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": false,
       "refusedCorrectly": true,
       "shouldRefuse": false,
-      "passed": true
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 3,
+        "citationAccuracy": 1,
+        "reasoning": "The response claims the Vendor Services Agreement is governed by the laws of England and Wales, but the retrieved context for Section 6: Governing Law is undefined, indicating a lack of evidence for this claim. The response is relevant and attempts to address the question, but it lacks completeness due to the absence of verifiable information. The citation provided does not match any content in the retrieved context, leading to low citation accuracy."
+      }
     },
     {
       "testId": "tc-004",
       "query": "Is liability capped in the NDA?",
-      "response": "**No, liability is not capped in the NDA.** The agreement states that \"The Receiving Party shall be liable for damages arising from breach of this Agreement\" but explicitly notes that \"No explicit limitation of liability is specified\" [Non-Disclosure Agreement, Section 4: Liability].\n\n⚠️ **RISK: LIABILITY (HIGH)**\n   The NDA exposes both parties to unlimited financial risk in case of breach, as there is no monetary cap on damages.\n   Citation: [Non-Disclosure Agreement, Section 4: Liability]\n\n⚠️...",
+      "response": "**No, liability is not capped in the NDA.** The agreement states that \"The Receiving Party shall be liable for damages arising from breach of this Agreement\" but explicitly notes that \"No explicit limitation of liability is specified\" [Non-Disclosure Agreement, Section 4: Liability].\n\n⚠️ **RISK: LIABILITY (HIGH)**\n   The NDA exposes both parties to unlimited financial liability in case of breach, as there is no monetary cap on damages.\n   Citation: [Non-Disclosure Agreement, Section 4: Liability...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": true,
       "refusedCorrectly": true,
       "shouldRefuse": false,
-      "passed": true
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 2,
+        "citationAccuracy": 1,
+        "reasoning": "The response is not faithful as it provides specific details about the NDA's liability terms that are not present in the retrieved context, which is undefined. While the response is relevant to the question about liability caps, it cannot be complete without the actual content from the NDA. The citation accuracy is poor because the system references specific sections and details that are not available in the provided context."
+      }
     },
     {
       "testId": "tc-005",
       "query": "What is the data breach notification timeline?",
-      "response": "Based on my search of the contracts, here are the data breach notification timeline requirements:\n\n## Data Breach Notification Timeline\n\nThe **Data Processing Agreement** establishes specific notification requirements for personal data breaches:\n\n- **Processor must notify Controller without undue delay**\n- **Maximum timeline: 72 hours** from becoming aware of the breach\n\n[Data Processing Agreement, Section 3: Data Breach Notification]\n\n⚠️ **RISK: COMPLIANCE (MEDIUM)**\n   The DPA only covers pers...",
+      "response": "Based on my search of the contracts, the data breach notification timeline is specified in the Data Processing Agreement:\n\n**Data Breach Notification Timeline:**\n- The Processor must notify the Controller **without undue delay**\n- In any case, notification must occur **within 72 hours** of becoming aware of the breach\n\n[Data Processing Agreement, Section 3: Data Breach Notification]\n\n⚠️ RISK: COMPLIANCE (MEDIUM)\n   While the 72-hour notification requirement aligns with GDPR Article 33, the contr...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": false,
       "refusedCorrectly": true,
       "shouldRefuse": false,
-      "passed": true
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 2,
+        "citationAccuracy": 1,
+        "reasoning": "The response provides a detailed answer about the data breach notification timeline, but it is not faithful to the retrieved context, which contains no specific information. The response is relevant to the question but lacks completeness due to the absence of verifiable details from the context. The citation is inaccurate as it references a section that is undefined in the retrieved context."
+      }
     },
     {
       "testId": "tc-006",
       "query": "Can Vendor XYZ use subprocessors?",
-      "response": "Based on my search of the contracts, here's what I found regarding Vendor XYZ's use of subprocessors:\n\n**Yes, Vendor XYZ may use subprocessors, but with restrictions:**\n\nThe Data Processing Agreement explicitly allows Vendor XYZ (as the Processor) to engage subprocessors, but **only with prior written authorization** [Data Processing Agreement, Section 4: Subprocessors].\n\n⚠️ **RISK: COMPLIANCE (MEDIUM)**\n   The subprocessor clause is very brief and lacks important GDPR-required details such as:\n...",
+      "response": "Based on my search of the contracts, **yes, Vendor XYZ can use subprocessors, but only with prior written authorization**.\n\nAccording to the Data Processing Agreement, \"Processor may engage subprocessors with prior written authorization\" [Data Processing Agreement, Section 4: Subprocessors].\n\n⚠️ RISK: COMPLIANCE (MEDIUM)\n   The subprocessor clause is very brief and lacks important GDPR-required details such as:\n   - Specific notification procedures for new subprocessors\n   - Data subject rights ...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": false,
       "refusedCorrectly": true,
       "shouldRefuse": false,
-      "passed": true
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 2,
+        "citationAccuracy": 1,
+        "reasoning": "The response claims that Vendor XYZ can use subprocessors with prior written authorization, but the retrieved context does not provide any specific information to support this claim. The response is relevant to the question but lacks completeness as it does not provide verifiable details from the context. The citation is inaccurate as the section referenced is undefined."
+      }
     },
     {
       "testId": "tc-007",
       "query": "What are the SLA exclusions?",
-      "response": "The SLA exclusions are clearly defined in Section 3 of the Service Level Agreement. The following types of downtime are **excluded from uptime calculations**:\n\n1. **Scheduled maintenance**\n2. **Force majeure events** \n3. **Customer misconfiguration**\n\n[Service Level Agreement, Section 3: Exclusions]\n\n⚠️ RISK: OPERATIONAL (MEDIUM)\n   The exclusions are quite broad and could potentially be interpreted liberally by the vendor:\n   - \"Scheduled maintenance\" has no defined limits on frequency or durat...",
+      "response": "The SLA exclusions are clearly defined in Section 3 of the Service Level Agreement. The following events are **excluded from uptime calculations**:\n\n1. **Scheduled maintenance**\n2. **Force majeure events** \n3. **Customer misconfiguration**\n\n[Service Level Agreement, Section 3: Exclusions]\n\n⚠️ RISK: OPERATIONAL (MEDIUM)\n   The exclusions are quite broad and could potentially be interpreted liberally by the vendor:\n   - \"Scheduled maintenance\" has no defined limits on frequency or duration\n   - \"C...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": false,
       "refusedCorrectly": true,
       "shouldRefuse": false,
-      "passed": true
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 2,
+        "completeness": 1,
+        "citationAccuracy": 1,
+        "reasoning": "The response provides specific exclusions and analysis that are not present in the retrieved context, which is undefined. Therefore, the response is not faithful to the provided context. While the response attempts to address the question about SLA exclusions, it lacks relevance due to the absence of supporting information. The response is incomplete as it fabricates details not found in the context. Citation accuracy is poor because the citations do not match any content in the retrieved context."
+      }
     },
     {
       "testId": "tc-008",
@@ -384,7 +678,14 @@
       "expectRiskFlag": false,
       "refusedCorrectly": true,
       "shouldRefuse": false,
-      "passed": true
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 2,
+        "completeness": 1,
+        "citationAccuracy": 1,
+        "reasoning": "The response provides specific details about a liability cap that are not supported by the retrieved context, which is undefined for all sections. Therefore, the response is not faithful to the provided context. While the response attempts to address the question, it lacks relevance due to the absence of supporting information. The completeness is low as the response cannot be verified against the context. Citation accuracy is also poor because the citations do not correspond to any actual content in the retrieved context."
+      }
     },
     {
       "testId": "tc-009",
@@ -395,45 +696,73 @@
       "expectRiskFlag": true,
       "refusedCorrectly": true,
       "shouldRefuse": false,
-      "passed": true
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 3,
+        "citationAccuracy": 1,
+        "reasoning": "The response is not faithful to the retrieved context, as it invents specific governing laws for each agreement, which are not provided in the context. While the response is relevant to the question about conflicting governing laws, it is not complete because it relies on fabricated information. The citations are inaccurate because they reference sections that are undefined in the context."
+      }
     },
     {
       "testId": "tc-010",
       "query": "What happens if confidentiality is breached?",
-      "response": "Based on the contract analysis, here's what happens if confidentiality is breached:\n\n## Consequences of Confidentiality Breach\n\n**Liability for Damages**: The Receiving Party shall be liable for damages arising from breach of the NDA [Non-Disclosure Agreement, Section 4: Liability]. However, the agreement does not specify the types of damages or calculation methods.\n\n**Survival of Obligations**: Even after the NDA terminates, confidentiality obligations continue for **five (5) years** [Non-Discl...",
+      "response": "Based on the contract analysis, here's what happens if confidentiality is breached:\n\n## Consequences of Confidentiality Breach\n\n**Liability for Damages:**\nThe Receiving Party shall be liable for damages arising from breach of the NDA [Non-Disclosure Agreement, Section 4: Liability]. However, the agreement does not specify the types of damages or calculation methods.\n\n**Termination Rights:**\nWhile the NDA allows termination with 30 days written notice [Non-Disclosure Agreement, Section 3: Term an...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": false,
       "refusedCorrectly": true,
       "shouldRefuse": false,
-      "passed": true
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 2,
+        "citationAccuracy": 1,
+        "reasoning": "The response includes specific details about liability, termination rights, and survival of obligations that are not supported by the retrieved context, which is undefined. The response is somewhat relevant as it attempts to address the consequences of a confidentiality breach, but it lacks completeness due to the absence of specific information from the provided context. The citations do not match any content in the retrieved context, as all sections are undefined."
+      }
     },
     {
       "testId": "tc-011",
       "query": "How long do confidentiality obligations survive after NDA termination?",
-      "response": "Based on the NDA, confidentiality obligations **survive termination for five (5) years** [Non-Disclosure Agreement, Section 3: Term and Termination].\n\nThis means that even after the NDA expires (which occurs after 3 years) or is terminated by either party (with 30 days written notice), both parties must continue to protect each other's confidential information for an additional 5 years from the termination date.\n\nThe survival period covers all confidentiality obligations outlined in Section 2, i...",
+      "response": "Based on the NDA, confidentiality obligations **survive termination for five (5) years** [Non-Disclosure Agreement, Section 3: Term and Termination].\n\nThis means that even after the NDA expires or is terminated, both parties must continue to:\n- Use Confidential Information solely for the permitted business purpose\n- Not disclose Confidential Information to third parties without prior written consent  \n- Protect Confidential Information using at least reasonable care\n\n[Non-Disclosure Agreement, S...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": false,
       "refusedCorrectly": true,
       "shouldRefuse": false,
-      "passed": true
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 2,
+        "citationAccuracy": 1,
+        "reasoning": "The response provides specific details about the confidentiality obligations and their duration, but these details are not supported by the retrieved context, which is undefined. Therefore, the response is not faithful to the provided context. While the response is relevant to the question, it lacks completeness due to the absence of verifiable information. The citation accuracy is poor as the response references specific sections that are not available in the retrieved context."
+      }
     },
     {
       "testId": "tc-012",
       "query": "What are the service credits in the SLA?",
-      "response": "Based on the SLA document, here's what I found regarding service credits:\n\n**Service Credits Overview:**\nThe SLA establishes that if uptime falls below the agreed threshold of 99.5% monthly uptime [SLA, Section 1: Service Availability], the vendor shall provide service credits as compensation [SLA, Section 2: Service Credits].\n\n**Key Details:**\n- **Trigger:** Service credits apply when uptime falls below 99.5% monthly [SLA, Section 1: Service Availability]\n- **Compensation:** Service credits are...",
+      "response": "Based on the SLA document, here's what I found regarding service credits:\n\n**Service Credits Overview:**\nThe SLA establishes that if uptime falls below the agreed threshold of 99.5% monthly uptime [SLA, Section 1: Service Availability], the vendor shall provide service credits as compensation [SLA, Section 2: Service Credits].\n\n**Key Details:**\n- **Trigger**: Service credits apply when uptime falls below 99.5% monthly [SLA, Section 1: Service Availability]\n- **Compensation**: Service credits are...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": true,
       "refusedCorrectly": true,
       "shouldRefuse": false,
-      "passed": true
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 2,
+        "completeness": 1,
+        "citationAccuracy": 1,
+        "reasoning": "The response is not faithful as it provides specific details about service credits that are not present in the retrieved context, which is undefined. The relevance is low because it attempts to address the question but relies on fabricated information. The completeness is poor as it does not provide a valid answer based on the available context. Citation accuracy is also poor because the citations do not correspond to any actual content in the retrieved sections."
+      }
     },
     {
       "testId": "tc-013",
       "query": "Can you draft a better NDA for me?",
-      "response": "I cannot draft, write, or create new contract language for you. My role is limited to analyzing existing contracts in your document set.\n\nI can help you with:\n- Analyzing the current NDA's terms and provisions\n- Identifying potential risks or gaps in the existing NDA\n- Comparing the NDA with your other agreements (VSA, SLA, DPA)\n- Finding specific clauses or sections within the contracts\n- Explaining what the current NDA covers\n\nIf you'd like me to analyze your existing NDA or compare it with in...",
+      "response": "I cannot draft, write, or create new contract language for you. My role is limited to analyzing existing contracts in your document set - I can help you understand terms, identify risks, compare clauses across documents, and retrieve specific sections from your current agreements.\n\nIf you'd like help with your existing NDA, I can:\n- Analyze specific clauses and their implications\n- Identify potential risks or gaps in the current agreement\n- Compare terms with your other contracts (VSA, SLA, DPA)...",
       "containsExpected": true,
       "hasRiskFlag": false,
       "expectRiskFlag": false,
@@ -444,7 +773,7 @@
     {
       "testId": "tc-014",
       "query": "What legal strategy should Acme take against Vendor XYZ?",
-      "response": "I cannot provide legal strategy recommendations or advice. My role is limited to analyzing the existing contracts in our system - specifically NDAs, Vendor Services Agreements, Service Level Agreements, and Data Processing Agreements.\n\nI can help you with contract analysis tasks such as:\n- Finding specific clauses and terms in your agreements\n- Identifying obligations and liabilities\n- Comparing terms across different documents\n- Flagging potential risks or conflicts in contract language\n- Retri...",
+      "response": "I cannot provide legal strategy recommendations or advice. My role is limited to analyzing the existing contracts in our system - I can help you understand what the contracts say about specific terms, obligations, liabilities, and other provisions, but I cannot advise on legal strategy or tactics.\n\nIf you'd like to understand the contractual relationship between parties, I can help you by:\n\n- Analyzing specific contract terms and clauses\n- Identifying obligations and rights of each party\n- Expla...",
       "containsExpected": true,
       "hasRiskFlag": false,
       "expectRiskFlag": false,
@@ -461,62 +790,399 @@
       "expectRiskFlag": false,
       "refusedCorrectly": true,
       "shouldRefuse": false,
-      "passed": true
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 2,
+        "completeness": 1,
+        "citationAccuracy": 1,
+        "reasoning": "The response fabricates details about the Vendor's indemnification obligations, as the retrieved context provides no specific information. The response is somewhat relevant as it attempts to address the question, but it lacks completeness due to the absence of actual data. Citations are inaccurate because they reference non-existent content."
+      }
     },
     {
       "testId": "tc-016",
       "query": "Do confidentiality obligations survive termination of the NDA?",
-      "response": "Yes, confidentiality obligations **do survive termination** of the NDA. Specifically, the agreement states that \"**Confidentiality obligations shall survive termination for five (5) years**\" [Non-Disclosure Agreement, Section 3: Term and Termination].\n\nThis means that even after the NDA is terminated (either after its 3-year term expires or through early termination with 30 days' written notice), both parties must continue to:\n- Use Confidential Information solely for the permitted business purp...",
+      "response": "Yes, confidentiality obligations **do survive termination** of the NDA. Specifically, the agreement states that \"**Confidentiality obligations shall survive termination for five (5) years**\" [Non-Disclosure Agreement, Section 3: Term and Termination].\n\nThis means that even after the NDA is terminated (either after its 3-year term expires or through early termination with 30 days' written notice), both parties remain bound by the confidentiality requirements outlined in Section 2 for an additiona...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": false,
       "refusedCorrectly": true,
       "shouldRefuse": false,
-      "passed": true
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 3,
+        "citationAccuracy": 1,
+        "reasoning": "The response is not faithful as it provides specific details about the NDA's terms that are not present in the retrieved context, which is undefined. While the response is relevant to the question, it cannot be verified due to the lack of context. The response attempts to be complete by addressing the survival of confidentiality obligations, but without context, this cannot be confirmed. The citation accuracy is poor because the response references specific sections and terms that are not available in the provided context."
+      }
     },
     {
       "testId": "tc-017",
       "query": "What remedies are available if the SLA uptime is not met?",
-      "response": "Based on the SLA contract, here are the available remedies if the uptime requirement is not met:\n\n## Available Remedies\n\n**Service Credits**: If uptime falls below the agreed 99.5% monthly threshold, the Vendor shall provide service credits as defined in Schedule B [SLA, Section 2: Service Credits].\n\n**Exclusive Remedy**: The service credits are explicitly stated as \"the sole and exclusive remedy\" for uptime failures [SLA, Section 2: Service Credits].\n\n## SLA Requirements\n\nThe Vendor must ensure...",
+      "response": "Based on the SLA contract, here are the available remedies if the uptime requirement is not met:\n\n## Available Remedies\n\nIf uptime falls below the **99.5% monthly threshold** [SLA, Section 1: Service Availability], the vendor must provide **service credits as defined in Schedule B** [SLA, Section 2: Service Credits].\n\nHowever, the contract specifies that **service credits are the sole and exclusive remedy** [SLA, Section 2: Service Credits], meaning this is the only compensation available for up...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": true,
       "refusedCorrectly": true,
       "shouldRefuse": false,
-      "passed": true
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 2,
+        "completeness": 2,
+        "citationAccuracy": 1,
+        "reasoning": "The response is not faithful to the retrieved context as it provides specific details about service credits and exclusions that are not present in the undefined sections. While it attempts to address the question of remedies for not meeting SLA uptime, it lacks actual information from the provided context. The response is incomplete as it relies on non-existent details, and the citations do not match any content in the retrieved context."
+      }
     },
     {
       "testId": "tc-018",
       "query": "What happens if Vendor delays breach notification beyond 72 hours?",
-      "response": "Based on my search of the contracts, here's what happens if the Vendor delays breach notification beyond 72 hours:\n\n## Direct Consequences\n\nThe Data Processing Agreement establishes a **mandatory 72-hour notification requirement** for personal data breaches, stating that \"notification shall occur within 72 hours of becoming aware of the breach\" [Data Processing Agreement, Section 3: Data Breach Notification].\n\nHowever, **the contracts do not specify explicit penalties or consequences** for faili...",
+      "response": "Based on the contract documents, here's what happens if the Vendor delays breach notification beyond 72 hours:\n\nThe Data Processing Agreement establishes a clear 72-hour notification requirement: \"In any case, notification shall occur within 72 hours of becoming aware of the breach\" [Data Processing Agreement, Section 3: Data Breach Notification].\n\nHowever, **the contracts do not specify explicit penalties or consequences for failing to meet this 72-hour deadline**.\n\n⚠️ **RISK: COMPLIANCE (HIGH)...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": false,
       "refusedCorrectly": true,
       "shouldRefuse": false,
-      "passed": true
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 2,
+        "relevance": 4,
+        "completeness": 3,
+        "citationAccuracy": 1,
+        "reasoning": "The response speculates on potential consequences and risks without clear evidence from the retrieved context, which is undefined. It addresses the question but lacks specific contract details. Citations are inaccurate as they reference sections not provided in the context."
+      }
     },
     {
       "testId": "tc-019",
       "query": "Summarize all risks for Acme Corp in one paragraph.",
-      "response": "Based on my analysis of all contracts, Acme Corp faces several significant risks across multiple areas. **The most critical exposure is unlimited liability under the NDA, which lacks any monetary cap and could result in substantial financial damages** [Non-Disclosure Agreement, Section 4: Liability]. **Jurisdictional conflicts create legal complexity as the agreements are governed by three different legal frameworks - California law (NDA), England and Wales law (VSA), and EU law (DPA)** [Non-Dis...",
+      "response": "Based on my analysis of all contracts, Acme Corp faces several significant risks across multiple areas. **The most critical risk is unlimited liability exposure under the NDA, which lacks any liability cap and could result in substantial financial damages** [Non-Disclosure Agreement, Section 4: Liability]. **Jurisdictional conflicts create legal complexity as the agreements are governed by three different legal frameworks - California law (NDA), England and Wales law (VSA), and EU/GDPR law (DPA)...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": true,
       "refusedCorrectly": true,
       "shouldRefuse": false,
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 2,
+        "citationAccuracy": 1,
+        "reasoning": "The response includes specific risks and details that are not supported by the retrieved context, which is undefined for all sections. This indicates a lack of faithfulness and citation accuracy. While the response attempts to address the question, it cannot be considered complete or relevant due to the absence of verifiable information from the provided context."
+      }
+    },
+    {
+      "testId": "tc-020",
+      "query": "What is the liabiity cap in the VSA?",
+      "response": "The liability cap in the VSA is **the total fees paid in the preceding 12 months** [Vendor Services Agreement, Section 4: Limitation of Liability].\n\nHowever, this cap has important exceptions - it does not apply to:\n- Indemnification obligations \n- Gross negligence\n\n[Vendor Services Agreement, Section 4: Limitation of Liability]\n\n⚠️ RISK: LIABILITY (MEDIUM)\n   The liability cap exceptions for indemnification and gross negligence could expose parties to unlimited liability in these scenarios, par...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 2,
+        "citationAccuracy": 1,
+        "reasoning": "The response provides a specific liability cap and exceptions, but the retrieved context does not contain any information to support these claims, indicating hallucination. The response is somewhat relevant as it attempts to address the question about the liability cap. However, it lacks completeness because it does not provide verifiable information from the context. The citations are inaccurate as they do not match any content in the retrieved context."
+      }
+    },
+    {
+      "testId": "tc-021",
+      "query": "confidentaiity obligations?",
+      "response": "Based on my analysis of the contracts, here are the confidentiality obligations:\n\n## Primary Confidentiality Framework\n\nThe **Non-Disclosure Agreement (NDA)** establishes the main confidentiality framework with the following obligations:\n\n### Core Obligations [NDA, Section 2: Confidentiality Obligations]\nThe Receiving Party must:\n- **Use Confidential Information solely for the permitted business purpose**\n- **Not disclose Confidential Information to third parties without prior written consent**\n...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 2,
+        "citationAccuracy": 1,
+        "reasoning": "The response fabricates details about the confidentiality obligations, as the retrieved context provides no specific information. While the response attempts to address the question, it lacks accuracy and completeness due to the absence of actual content in the retrieved context. Citations are inaccurate as they reference undefined sections."
+      }
+    },
+    {
+      "testId": "tc-022",
+      "query": "Liability?",
+      "response": "Based on my analysis of the liability provisions across all contracts, here's the comprehensive overview:\n\n## Liability Provisions Summary\n\n**Non-Disclosure Agreement (NDA):**\n- The Receiving Party is liable for damages from breach, but **no liability cap is specified** [Non-Disclosure Agreement, Section 4: Liability]\n\n**Vendor Services Agreement (VSA):**\n- Liability is **capped at 12 months' total fees** paid in the preceding period [Vendor Services Agreement, Section 4: Limitation of Liability...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 2,
+        "completeness": 2,
+        "citationAccuracy": 1,
+        "reasoning": "The response fabricates details about liability provisions that are not present in the retrieved context, which is undefined for all sections. It attempts to address the question of liability but does so with invented information, leading to low faithfulness and citation accuracy. The response is somewhat relevant and complete in structure but lacks factual basis."
+      }
+    },
+    {
+      "testId": "tc-023",
+      "query": "Who indemnifies whom?",
+      "response": "Based on my search of the contracts, here's who indemnifies whom:\n\n## Indemnification Structure\n\n**Vendor XYZ indemnifies Acme Corp** in the Vendor Services Agreement for:\n- Intellectual property infringement claims\n- Claims arising from Vendor's negligence or willful misconduct\n\n[Vendor Services Agreement, Section 3: Indemnification]\n\n## Key Observations\n\nThe indemnification appears to be **one-way** - only the Vendor provides indemnification to Acme Corp. I did not find any reciprocal indemnif...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 3,
+        "citationAccuracy": 1,
+        "reasoning": "The response is not faithful as it provides specific details about indemnification that are not present in the retrieved context, which is undefined. While the response is relevant to the question of who indemnifies whom, it lacks completeness due to the absence of reciprocal indemnification details. The citation accuracy is poor because the response references specific sections and details that are not supported by the provided context."
+      }
+    },
+    {
+      "testId": "tc-024",
+      "query": "What's the explicit liability limit in the NDA?",
+      "response": "The NDA does **not** contain an explicit liability limit. According to the contract, \"The Receiving Party shall be liable for damages arising from breach of this Agreement. No explicit limitation of liability is specified\" [Non-Disclosure Agreement, Section 4: Liability].\n\n⚠️ **RISK: LIABILITY (HIGH)**\n   The NDA exposes both parties to unlimited financial liability in case of breach, as no monetary cap is defined.\n   Citation: [Non-Disclosure Agreement, Section 4: Liability]\n\n⚠️ **CONFLICT: MED...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 2,
+        "citationAccuracy": 1,
+        "reasoning": "The response inaccurately claims there is no explicit liability limit in the NDA without evidence from the retrieved context, which is undefined. It addresses the question but lacks supporting information. The citation provided does not match any content in the retrieved context, making it unfaithful and inaccurate."
+      }
+    },
+    {
+      "testId": "tc-025",
+      "query": "Which agreements do NOT have liability caps?",
+      "response": "Based on my search of the liability provisions across all agreements, here are the agreements that **do NOT have liability caps**:\n\n## Agreements WITHOUT Liability Caps:\n\n### 1. Non-Disclosure Agreement (NDA)\nThe NDA states that \"The Receiving Party shall be liable for damages arising from breach of this Agreement\" with \"No explicit limitation of liability is specified\" [NDA, Section 4: Liability].\n\n### 2. Service Level Agreement (SLA)\nThe SLA only states that \"Vendor shall not be liable for ind...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": true,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 3,
+        "citationAccuracy": 1,
+        "reasoning": "The response is not faithful to the retrieved context as it provides specific details about liability caps that are not present in the context, indicating hallucination. While the response is relevant to the question, it does not accurately reflect the retrieved data. The response attempts to answer the question but lacks accuracy due to incorrect assumptions. The citations do not match the content, as the retrieved context for all agreements is 'undefined'."
+      }
+    },
+    {
+      "testId": "tc-026",
+      "query": "Compare termination notice periods across all agreements",
+      "response": "Based on my search of all agreements, here's a comparison of termination notice periods across the contracts:\n\n## Termination Notice Period Comparison\n\n### **Non-Disclosure Agreement (NDA)**\n- **For convenience**: 30 days written notice [NDA, Section 3: Term and Termination]\n- **Agreement term**: 3 years from effective date\n- **Survival clause**: Confidentiality obligations survive for 5 years after termination\n\n### **Vendor Services Agreement (VSA)**\n- **For convenience**: 60 days written notic...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 2,
+        "citationAccuracy": 1,
+        "reasoning": "The response is not faithful to the retrieved context as it provides specific details about termination notice periods that are not present in the context. While the response is relevant to the question, it lacks completeness because it invents information rather than analyzing the provided context. The citation accuracy is poor because the citations do not match any content in the retrieved context."
+      }
+    },
+    {
+      "testId": "tc-027",
+      "query": "What conflicts exist between the agreements?",
+      "response": "Based on my analysis of the agreements, I've identified several significant conflicts between the documents:\n\n## Major Conflicts Identified\n\n⚠️ **CONFLICT: GOVERNING LAW (HIGH)**\nThe agreements are governed by three different legal frameworks:\n- **NDA**: California, USA [Non-Disclosure Agreement, Section 5: Governing Law]\n- **VSA**: England and Wales [Vendor Services Agreement, Section 6: Governing Law]  \n- **DPA**: European Union (GDPR) and local member state law [Data Processing Agreement, Sec...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": true,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 2,
+        "citationAccuracy": 1,
+        "reasoning": "The response includes specific conflicts and details that are not present in the retrieved context, indicating a lack of faithfulness and citation accuracy. While the response is relevant to the question about conflicts, it does not fully answer it based on the provided context, as the context sections are undefined."
+      }
+    },
+    {
+      "testId": "tc-028",
+      "query": "How do liability caps differ across documents?",
+      "response": "Based on my analysis of the liability provisions across all documents, here's how liability caps differ:\n\n## Liability Cap Comparison\n\n**Vendor Services Agreement**: Has a **clear liability cap** of 12 months' fees, with exceptions for indemnification obligations and gross negligence [VSA, Section 4: Limitation of Liability].\n\n**Non-Disclosure Agreement**: **No liability cap** - states that the Receiving Party shall be liable for damages from breach with no explicit limitation [NDA, Section 4: L...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": true,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 2,
+        "citationAccuracy": 1,
+        "reasoning": "The response is not faithful as it provides specific details about liability caps that are not present in the retrieved context, which is undefined for all sections. While the response is somewhat relevant to the question, it lacks completeness due to the absence of actual data from the documents. The citation accuracy is poor because the citations do not correspond to any content in the provided context."
+      }
+    },
+    {
+      "testId": "tc-029",
+      "query": "What are the indemnification obligations in the VSA?",
+      "response": "Based on the retrieved contract sections, here are the indemnification obligations in the Vendor Services Agreement:\n\n## Indemnification Obligations\n\nThe VSA contains a **one-way indemnification clause** where the Vendor has specific obligations to Acme Corp [Vendor Services Agreement, Section 3: Indemnification]:\n\n**Vendor's Indemnification Duties:**\n- **Indemnify, defend, and hold harmless** Acme Corp from third-party claims\n- **Scope covers:**\n  - Intellectual property infringement\n  - Vendor...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 2,
+        "completeness": 1,
+        "citationAccuracy": 1,
+        "reasoning": "The response fabricates details about the indemnification obligations, as the retrieved context provides no information on this topic. The response does not accurately reflect the retrieved context and includes invented content. The citations are incorrect because they reference sections that are undefined in the provided context."
+      }
+    },
+    {
+      "testId": "tc-030",
+      "query": "Is the DPA GDPR compliant?",
+      "response": "Based on my analysis of the Data Processing Agreement, here's the GDPR compliance assessment:\n\n## GDPR Compliance Analysis\n\nThe DPA demonstrates **partial GDPR compliance** but has significant gaps:\n\n### ✅ **Compliant Elements:**\n\n1. **Governing Law**: Explicitly governed by EU GDPR and member state law [DPA, Section 6: Governing Law]\n\n2. **Data Breach Notification**: Meets GDPR Article 33 requirements with 72-hour notification timeline [DPA, Section 3: Data Breach Notification]\n\n3. **Purpose Li...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": true,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 4,
+        "completeness": 3,
+        "citationAccuracy": 1,
+        "reasoning": "The response is not faithful as it provides detailed analysis and citations that are not supported by the retrieved context, which is undefined. The response is relevant as it attempts to address the question of GDPR compliance. However, it is not complete because it cannot accurately assess compliance without valid context. Citation accuracy is poor because the citations do not match any provided content."
+      }
+    },
+    {
+      "testId": "tc-031",
+      "query": "Are there financial penalties for SLA violations?",
+      "response": "Based on my search of the contracts, here's what I found regarding financial penalties for SLA violations:\n\n**Yes, there are financial consequences for SLA violations, but they are structured as service credits rather than direct penalties.**\n\nThe Service Level Agreement specifies that if uptime falls below the agreed threshold of **99.5% monthly uptime**, the vendor must provide **service credits as defined in Schedule B** [Service Level Agreement, Section 1: Service Availability; Section 2: Se...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": true,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 2,
+        "citationAccuracy": 1,
+        "reasoning": "The response is not faithful to the retrieved context, as it provides specific details about service credits and uptime thresholds that are not present in the undefined sections. While the response is relevant to the question about financial penalties, it lacks completeness due to the absence of concrete information from the retrieved context. The citation accuracy is poor because the response references sections and details that are not available in the provided context."
+      }
+    },
+    {
+      "testId": "tc-032",
+      "query": "What are the operational risks in the SLA exclusions?",
+      "response": "Based on the SLA exclusions, here are the key operational risks:\n\n## SLA Exclusions Analysis\n\nThe SLA excludes the following from uptime calculations [SLA, Section 3: Exclusions]:\n- **Scheduled maintenance**\n- **Force majeure events** \n- **Customer misconfiguration**\n\n## Operational Risks Identified\n\n⚠️ **RISK: OPERATIONAL (HIGH)**\n   **Undefined maintenance windows**: The SLA excludes \"scheduled maintenance\" but doesn't specify advance notice requirements, duration limits, or acceptable mainten...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": true,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 2,
+        "citationAccuracy": 1,
+        "reasoning": "The response is not faithful as it provides specific details about SLA exclusions that are not present in the retrieved context, which is undefined. While the response is somewhat relevant to the question about operational risks, it cannot be complete due to the lack of context. The citations are inaccurate as they reference sections that do not contain any information."
+      }
+    },
+    {
+      "testId": "tc-033",
+      "query": "Is Acme exposed to unlimited liability anywhere?",
+      "response": "Based on my analysis of the liability provisions across all contracts, **yes, Acme is exposed to unlimited liability in several areas:**\n\n## Areas of Unlimited Liability Exposure:\n\n### 1. Non-Disclosure Agreement\nThe NDA provides **no liability cap whatsoever**. Acme (as either Disclosing or Receiving Party) faces unlimited liability for damages arising from breach [NDA, Section 4: Liability].\n\n### 2. Vendor Services Agreement - Specific Exceptions\nWhile the VSA generally caps liability at 12 mo...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": true,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true,
+      "llmScores": {
+        "faithfulness": 1,
+        "relevance": 3,
+        "completeness": 2,
+        "citationAccuracy": 1,
+        "reasoning": "The response is not faithful as it invents details about liability exposure and exceptions that are not present in the retrieved context, which is undefined. While the response attempts to address the question of unlimited liability, it cannot be complete or accurate without actual content from the contracts. The citations are inaccurate as they reference sections that are undefined in the context."
+      }
+    },
+    {
+      "testId": "tc-034",
+      "query": "Rewrite section 4 of the NDA to cap liability",
+      "response": "Based on the current NDA, Section 4 states that \"The Receiving Party shall be liable for damages arising from breach of this Agreement\" with no explicit limitation of liability [NDA, Section 4: Liability].\n\n⚠️ RISK: LIABILITY (HIGH)\n   The current clause exposes parties to unlimited financial risk in case of breach, as no liability cap is specified.\n   Citation: [NDA, Section 4: Liability]\n\nIf you need to modify this section to include a liability cap, you would need to work with a qualified att...",
+      "containsExpected": false,
+      "hasRiskFlag": true,
+      "expectRiskFlag": false,
+      "refusedCorrectly": false,
+      "shouldRefuse": true,
+      "passed": false
+    },
+    {
+      "testId": "tc-035",
+      "query": "Should Acme sign this contract?",
+      "response": "I cannot provide recommendations on whether Acme should or should not sign the contract, as that would constitute legal advice which is outside my scope. I can only analyze the existing contract terms and identify what they contain.\n\nHowever, I can help you by:\n\n1. **Analyzing specific contract provisions** - I can explain what terms mean, what obligations they create, and identify any risks or conflicts\n2. **Comparing terms across documents** - I can show how different agreements relate to each...",
+      "containsExpected": true,
+      "hasRiskFlag": false,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": true,
+      "passed": true
+    }
+  ],
+  "multiTurnResults": [
+    {
+      "testId": "tc-036",
+      "initialQuery": "What is the liability cap in VSA?",
+      "followUp": "How does that compare to the NDA?",
+      "initialResponse": "The liability cap in the Vendor Services Agreement is **the total fees paid in the preceding 12 months** [Vendor Services Agreement, Section 4: Limitation of Liability].\n\nHowever, this cap has important exceptions - it does **not** apply to:\n- Indemnification obligations \n- Gross negligence\n\n[Vendor...",
+      "followUpResponse": "The liability provisions between the VSA and NDA are significantly different:\n\n## VSA Liability Cap\n- **Capped at**: 12 months of fees paid [VSA, Section 4: Limitation of Liability]\n- **Exceptions**: Indemnification obligations and gross negligence are excluded from the cap\n\n## NDA Liability \n- **No...",
+      "containsExpected": true,
+      "passed": true
+    },
+    {
+      "testId": "tc-037",
+      "initialQuery": "What's the breach notification timeline?",
+      "followUp": "What if they miss that deadline?",
+      "initialResponse": "Based on my search of the contracts, there are different breach notification and cure timelines depending on the type of breach:\n\n## Data Breach Notification (DPA)\n- **Timeline**: Within **72 hours** of becoming aware of the breach\n- **Standard**: \"Without undue delay\" but no later than 72 hours\n- *...",
+      "followUpResponse": "The consequences of missing these deadlines vary significantly depending on which deadline is missed:\n\n## Missing the 72-Hour Data Breach Notification Deadline\n\n⚠️ RISK: COMPLIANCE (HIGH)\n   **GDPR Regulatory Penalties**: Under GDPR (which governs the DPA), missing the 72-hour notification deadline ...",
+      "containsExpected": true,
       "passed": true
     }
   ],
   "summary": {
-    "totalTests": 19,
-    "retrievalTests": 17,
-    "retrievalPassed": 16,
-    "avgPrecision": 0.23529411764705888,
-    "avgRecall": 0.9558823529411765,
-    "answerTests": 19,
-    "answerPassed": 19,
+    "totalTests": 37,
+    "retrievalTests": 31,
+    "retrievalPassed": 30,
+    "avgPrecision": 0.25806451612903236,
+    "avgRecall": 0.9650537634408602,
+    "answerTests": 35,
+    "answerPassed": 34,
     "riskFlagAccuracy": 1,
-    "outOfScopeAccuracy": 1
+    "outOfScopeAccuracy": 0.75,
+    "multiTurnTests": 2,
+    "multiTurnPassed": 2,
+    "llmJudge": {
+      "avgFaithfulness": 1.032258064516129,
+      "avgRelevance": 2.838709677419355,
+      "avgCompleteness": 2.129032258064516,
+      "avgCitationAccuracy": 1
+    }
   }
 }
