@@ -1,0 +1,26 @@
+embedding:
+  provider: openai
+  model: text-embedding-3-small
+  dimensions: 1536
+
+llm:
+  provider: anthropic
+  model: claude-sonnet-4-20250514
+  temperature: 0.1
+  max_tokens: 2048
+
+retrieval:
+  top_k: 5
+  rerank: false
+
+chunking:
+  strategy: section-based
+  include_doc_prefix: true
+
+vector_store:
+  type: memory
+  persist_path: ./data/vectors.json
+
+prompts:
+  analyzer: ./config/prompts/analyzer.txt
+  risk_assessor: ./config/prompts/risk-assessor.txt

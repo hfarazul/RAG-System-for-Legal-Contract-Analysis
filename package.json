@@ -1,0 +1,26 @@
+{
+  "name": "legal-contract-analysis",
+  "version": "1.0.0",
+  "description": "Multi-Agent RAG System for Legal Contract Analysis",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "ingest": "tsx src/ingest.ts",
+    "eval": "tsx eval/evaluate.ts",
+    "test:config": "tsx src/config.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^1.0.0",
+    "@ai-sdk/openai": "^1.0.0",
+    "ai": "^4.0.0",
+    "dotenv": "^17.2.3",
+    "yaml": "^2.3.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  }
+}
