@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useChat } from '@ai-sdk/react';
+import MessageContent from '@/components/MessageContent';
 
 export default function ChatPage() {
   const [input, setInput] = useState('');
@@ -63,7 +64,11 @@ export default function ChatPage() {
                 <div className="whitespace-pre-wrap">
                   {message.parts.map((part, index) => {
                     if (part.type === 'text') {
-                      return <span key={index}>{part.text}</span>;
+                      return message.role === 'assistant' ? (
+                        <MessageContent key={index} content={part.text} />
+                      ) : (
+                        <span key={index}>{part.text}</span>
+                      );
                     }
                     return null;
                   })}
