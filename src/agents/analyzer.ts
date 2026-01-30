@@ -116,10 +116,13 @@ export class AnalyzerAgent {
       maxTokens: this.maxTokens,
     });
 
-    // Save assistant response to history
-    this.conversationHistory.push({ role: 'assistant', content: result.text });
+    // Save assistant response to history (only if non-empty)
+    const responseText = result.text || '';
+    if (responseText) {
+      this.conversationHistory.push({ role: 'assistant', content: responseText });
+    }
 
-    return result.text;
+    return responseText;
   }
 }
 

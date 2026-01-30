@@ -136,5 +136,138 @@
     "shouldContain": ["liability", "risk"],
     "expectRiskFlag": true,
     "category": "cross-document"
+  },
+  {
+    "id": "tc-020",
+    "query": "What is the liabiity cap in the VSA?",
+    "expectedChunks": ["vsa-s4"],
+    "shouldContain": ["12 months", "fees"],
+    "category": "edge-case"
+  },
+  {
+    "id": "tc-021",
+    "query": "confidentaiity obligations?",
+    "expectedChunks": ["nda-s2"],
+    "shouldContain": ["confidential", "disclose"],
+    "category": "edge-case"
+  },
+  {
+    "id": "tc-022",
+    "query": "Liability?",
+    "expectedChunks": ["nda-s4", "vsa-s4"],
+    "shouldContain": ["liability", "liable"],
+    "category": "edge-case"
+  },
+  {
+    "id": "tc-023",
+    "query": "Who indemnifies whom?",
+    "expectedChunks": ["vsa-s3"],
+    "shouldContain": ["indemnify", "Vendor"],
+    "category": "edge-case"
+  },
+  {
+    "id": "tc-024",
+    "query": "What's the explicit liability limit in the NDA?",
+    "expectedChunks": ["nda-s4"],
+    "shouldContain": ["no", "not", "unlimited"],
+    "category": "edge-case"
+  },
+  {
+    "id": "tc-025",
+    "query": "Which agreements do NOT have liability caps?",
+    "expectedChunks": ["nda-s4"],
+    "shouldContain": ["NDA", "no", "cap"],
+    "expectRiskFlag": true,
+    "category": "edge-case"
+  },
+  {
+    "id": "tc-026",
+    "query": "Compare termination notice periods across all agreements",
+    "expectedChunks": ["nda-s3", "vsa-s5"],
+    "shouldContain": ["30 days", "notice"],
+    "category": "cross-document"
+  },
+  {
+    "id": "tc-027",
+    "query": "What conflicts exist between the agreements?",
+    "expectedChunks": ["nda-s5", "vsa-s6", "dpa-s6"],
+    "shouldContain": ["California", "England", "conflict"],
+    "expectRiskFlag": true,
+    "category": "cross-document"
+  },
+  {
+    "id": "tc-028",
+    "query": "How do liability caps differ across documents?",
+    "expectedChunks": ["nda-s4", "vsa-s4", "dpa-s5"],
+    "shouldContain": ["NDA", "VSA", "liability"],
+    "expectRiskFlag": true,
+    "category": "cross-document"
+  },
+  {
+    "id": "tc-029",
+    "query": "What are the indemnification obligations in the VSA?",
+    "expectedChunks": ["vsa-s3"],
+    "shouldContain": ["Vendor", "indemnif", "intellectual property", "negligence"],
+    "category": "cross-document"
+  },
+  {
+    "id": "tc-030",
+    "query": "Is the DPA GDPR compliant?",
+    "expectedChunks": ["dpa-s3", "dpa-s6"],
+    "shouldContain": ["72 hours", "GDPR"],
+    "expectRiskFlag": true,
+    "category": "risk-detection"
+  },
+  {
+    "id": "tc-031",
+    "query": "Are there financial penalties for SLA violations?",
+    "expectedChunks": ["sla-s2"],
+    "shouldContain": ["service credits", "remedy"],
+    "expectRiskFlag": true,
+    "category": "risk-detection"
+  },
+  {
+    "id": "tc-032",
+    "query": "What are the operational risks in the SLA exclusions?",
+    "expectedChunks": ["sla-s3"],
+    "shouldContain": ["force majeure", "maintenance"],
+    "expectRiskFlag": true,
+    "category": "risk-detection"
+  },
+  {
+    "id": "tc-033",
+    "query": "Is Acme exposed to unlimited liability anywhere?",
+    "expectedChunks": ["nda-s4"],
+    "shouldContain": ["NDA", "unlimited", "no cap"],
+    "expectRiskFlag": true,
+    "category": "risk-detection"
+  },
+  {
+    "id": "tc-034",
+    "query": "Rewrite section 4 of the NDA to cap liability",
+    "shouldContain": ["cannot", "only analyze"],
+    "shouldRefuse": true,
+    "category": "out-of-scope"
+  },
+  {
+    "id": "tc-035",
+    "query": "Should Acme sign this contract?",
+    "shouldContain": ["cannot", "advice"],
+    "shouldRefuse": true,
+    "category": "out-of-scope"
+  },
+  {
+    "id": "tc-036",
+    "initialQuery": "What is the liability cap in VSA?",
+    "followUp": "How does that compare to the NDA?",
+    "shouldContain": ["no cap", "unlimited", "NDA"],
+    "category": "multi-turn"
+  },
+  {
+    "id": "tc-037",
+    "initialQuery": "What's the breach notification timeline?",
+    "followUp": "What if they miss that deadline?",
+    "shouldContain": ["violation", "breach", "72"],
+    "category": "multi-turn"
   }
 ]

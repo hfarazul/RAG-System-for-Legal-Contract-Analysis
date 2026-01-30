@@ -6,12 +6,15 @@ import { getAnalyzerAgent } from '../src/agents/analyzer.js';
 
 interface TestCase {
   id: string;
-  query: string;
+  query?: string;
   expectedChunks?: string[];
   shouldContain?: string[];
   shouldRefuse?: boolean;
   expectRiskFlag?: boolean;
   category: string;
+  // Multi-turn fields
+  initialQuery?: string;
+  followUp?: string;
 }
 
 interface RetrievalResult {
@@ -36,10 +39,21 @@ interface AnswerResult {
   passed: boolean;
 }
 
+interface MultiTurnResult {
+  testId: string;
+  initialQuery: string;
+  followUp: string;
+  initialResponse: string;
+  followUpResponse: string;
+  containsExpected: boolean;
+  passed: boolean;
+}
+
 interface EvaluationReport {
   timestamp: string;
   retrievalResults: RetrievalResult[];
   answerResults: AnswerResult[];
+  multiTurnResults: MultiTurnResult[];
   summary: {
     totalTests: number;
     retrievalTests: number;
@@ -50,6 +64,8 @@ interface EvaluationReport {
     answerPassed: number;
     riskFlagAccuracy: number;
     outOfScopeAccuracy: number;
+    multiTurnTests: number;
+    multiTurnPassed: number;
   };
 }
 
@@ -174,11 +190,66 @@ async function evaluateAnswers(testCases: TestCase[]): Promise<AnswerResult[]> {
 }
 
 /**
+ * Evaluate multi-turn conversations
+ */
+async function evaluateMultiTurn(testCases: TestCase[]): Promise<MultiTurnResult[]> {
+  const results: MultiTurnResult[] = [];
+
+  const multiTurnTests = testCases.filter(tc => tc.category === 'multi-turn');
+
+  if (multiTurnTests.length === 0) {
+    return results;
+  }
+
+  console.log(`\nEvaluating multi-turn conversations (${multiTurnTests.length} tests)...`);
+
+  const { getAnalyzerAgent } = await import('../src/agents/analyzer.js');
+
+  for (const tc of multiTurnTests) {
+    process.stdout.write(`  ${tc.id}: `);
+
+    const agent = await getAnalyzerAgent();
+
+    // Send initial query
+    const initialResponse = await agent.chatSync(tc.initialQuery!);
+
+    // Send follow-up (same agent maintains history)
+    const followUpResponse = await agent.chatSync(tc.followUp!);
+    const responseLower = followUpResponse.toLowerCase();
+
+    // Check if follow-up response contains expected keywords
+    let containsExpected = true;
+    if (tc.shouldContain) {
+      containsExpected = tc.shouldContain.some(keyword =>
+        responseLower.includes(keyword.toLowerCase())
+      );
+    }
+
+    const passed = containsExpected;
+
+    results.push({
+      testId: tc.id,
+      initialQuery: tc.initialQuery!,
+      followUp: tc.followUp!,
+      initialResponse: initialResponse.slice(0, 300) + (initialResponse.length > 300 ? '...' : ''),
+      followUpResponse: followUpResponse.slice(0, 300) + (followUpResponse.length > 300 ? '...' : ''),
+      containsExpected,
+      passed,
+    });
+
+    console.log(passed ? '✓' : '✗');
+  }
+
+  return results;
+}
+
+/**
  * Generate evaluation report
  */
 function generateReport(
   retrievalResults: RetrievalResult[],
-  answerResults: AnswerResult[]
+  answerResults: AnswerResult[],
+  multiTurnResults: MultiTurnResult[]
 ): EvaluationReport {
   const avgPrecision = retrievalResults.length > 0
     ? retrievalResults.reduce((sum, r) => sum + r.precision, 0) / retrievalResults.length
@@ -202,8 +273,9 @@ function generateReport(
     timestamp: new Date().toISOString(),
     retrievalResults,
     answerResults,
+    multiTurnResults,
     summary: {
-      totalTests: answerResults.length,
+      totalTests: answerResults.length + multiTurnResults.length,
       retrievalTests: retrievalResults.length,
       retrievalPassed: retrievalResults.filter(r => r.passed).length,
       avgPrecision,
@@ -212,6 +284,8 @@ function generateReport(
       answerPassed: answerResults.filter(r => r.passed).length,
       riskFlagAccuracy,
       outOfScopeAccuracy,
+      multiTurnTests: multiTurnResults.length,
+      multiTurnPassed: multiTurnResults.filter(r => r.passed).length,
     },
   };
 }
@@ -236,12 +310,21 @@ function printSummary(report: EvaluationReport): void {
   console.log(`  Risk Flag Accuracy: ${(summary.riskFlagAccuracy * 100).toFixed(1)}%`);
   console.log(`  Out-of-Scope Accuracy: ${(summary.outOfScopeAccuracy * 100).toFixed(1)}%`);
 
+  if (summary.multiTurnTests > 0) {
+    console.log('\nMulti-Turn Metrics:');
+    console.log(`  Tests Passed: ${summary.multiTurnPassed}/${summary.multiTurnTests}`);
+  }
+
   console.log('\nOverall:');
+  const multiTurnScore = summary.multiTurnTests > 0
+    ? (summary.multiTurnPassed / summary.multiTurnTests)
+    : 1;
   const overallScore = (
-    (summary.retrievalPassed / summary.retrievalTests) * 0.3 +
-    (summary.answerPassed / summary.answerTests) * 0.5 +
+    (summary.retrievalPassed / summary.retrievalTests) * 0.25 +
+    (summary.answerPassed / summary.answerTests) * 0.45 +
     summary.riskFlagAccuracy * 0.1 +
-    summary.outOfScopeAccuracy * 0.1
+    summary.outOfScopeAccuracy * 0.1 +
+    multiTurnScore * 0.1
   ) * 100;
   console.log(`  Score: ${overallScore.toFixed(1)}%`);
 
@@ -260,14 +343,19 @@ async function main() {
   const testCasesPath = path.join(process.cwd(), 'eval', 'testCases.json');
   const testCases: TestCase[] = JSON.parse(await fs.readFile(testCasesPath, 'utf-8'));
 
-  console.log(`\nLoaded ${testCases.length} test cases`);
+  // Separate single-turn and multi-turn tests
+  const singleTurnTests = testCases.filter(tc => tc.category !== 'multi-turn');
+  const multiTurnTests = testCases.filter(tc => tc.category === 'multi-turn');
+
+  console.log(`\nLoaded ${testCases.length} test cases (${singleTurnTests.length} single-turn, ${multiTurnTests.length} multi-turn)`);
 
   // Run evaluations
-  const retrievalResults = await evaluateRetrieval(testCases);
-  const answerResults = await evaluateAnswers(testCases);
+  const retrievalResults = await evaluateRetrieval(singleTurnTests);
+  const answerResults = await evaluateAnswers(singleTurnTests);
+  const multiTurnResults = await evaluateMultiTurn(multiTurnTests);
 
   // Generate and print report
-  const report = generateReport(retrievalResults, answerResults);
+  const report = generateReport(retrievalResults, answerResults, multiTurnResults);
   printSummary(report);
 
   // Save full report
