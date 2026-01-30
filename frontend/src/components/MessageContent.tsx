@@ -1,16 +1,17 @@
 'use client';
 
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 
 // Regex to match citations like [Document Name, Section X: Title]
-const CITATION_REGEX = /\[([^\]]+)\]/g;
+const CITATION_REGEX = /\[([^\]]+,\s*Section[^\]]+)\]/g;
+
 
 interface CitationProps {
   text: string;
 }
 
 function Citation({ text }: CitationProps) {
-  // Determine document type color
   const getDocTypeColor = (citation: string) => {
     const lower = citation.toLowerCase();
     if (lower.includes('nda')) return 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300';
@@ -30,25 +31,45 @@ function Citation({ text }: CitationProps) {
   );
 }
 
-// Risk flag patterns
-const RISK_PATTERNS = {
-  HIGH: /\b(HIGH|CRITICAL)\s*(RISK|SEVERITY)/gi,
-  MEDIUM: /\bMEDIUM\s*(RISK|SEVERITY)/gi,
-  LOW: /\bLOW\s*(RISK|SEVERITY)/gi,
-};
+// Process text to replace citations with placeholder and track them
+function processCitations(text: string): { processedText: string; citations: Map<string, string> } {
+  const citations = new Map<string, string>();
+  let counter = 0;
 
-function RiskBadge({ level }: { level: 'HIGH' | 'MEDIUM' | 'LOW' }) {
-  const colors = {
-    HIGH: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
-    MEDIUM: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300',
-    LOW: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
-  };
+  const processedText = text.replace(CITATION_REGEX, (match, citationText) => {
+    // Use a placeholder format that won't conflict with markdown syntax
+    // (double underscores would be interpreted as bold)
+    const placeholder = `\u2039CITE${counter}\u203a`;
+    citations.set(placeholder, citationText);
+    counter++;
+    return placeholder;
+  });
 
-  return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${colors[level]}`}>
-      {level} RISK
-    </span>
-  );
+  return { processedText, citations };
+}
+
+// Render text with citations
+function TextWithCitations({ text, citations }: { text: string; citations: Map<string, string> }) {
+  const parts: React.ReactNode[] = [];
+  let remaining = text;
+  let keyIndex = 0;
+
+  citations.forEach((citationText, placeholder) => {
+    const index = remaining.indexOf(placeholder);
+    if (index !== -1) {
+      if (index > 0) {
+        parts.push(<span key={`text-${keyIndex++}`}>{remaining.slice(0, index)}</span>);
+      }
+      parts.push(<Citation key={`citation-${keyIndex++}`} text={citationText} />);
+      remaining = remaining.slice(index + placeholder.length);
+    }
+  });
+
+  if (remaining) {
+    parts.push(<span key={`text-${keyIndex++}`}>{remaining}</span>);
+  }
+
+  return <>{parts}</>;
 }
 
 interface MessageContentProps {
@@ -56,40 +77,44 @@ interface MessageContentProps {
 }
 
 export default function MessageContent({ content }: MessageContentProps) {
-  // Split content by citations and render appropriately
-  const parts: React.ReactNode[] = [];
-  let lastIndex = 0;
-  let match;
+  const { processedText, citations } = processCitations(content);
 
-  // Reset regex state
-  CITATION_REGEX.lastIndex = 0;
-
-  while ((match = CITATION_REGEX.exec(content)) !== null) {
-    // Add text before citation
-    if (match.index > lastIndex) {
-      parts.push(
-        <span key={`text-${lastIndex}`}>
-          {content.slice(lastIndex, match.index)}
-        </span>
-      );
-    }
-
-    // Add citation
-    parts.push(
-      <Citation key={`citation-${match.index}`} text={match[1]} />
-    );
-
-    lastIndex = match.index + match[0].length;
-  }
-
-  // Add remaining text
-  if (lastIndex < content.length) {
-    parts.push(
-      <span key={`text-${lastIndex}`}>
-        {content.slice(lastIndex)}
-      </span>
-    );
-  }
-
-  return <>{parts}</>;
+  return (
+    <div className="prose prose-sm dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+      <ReactMarkdown
+        components={{
+          // Custom paragraph to handle citations
+          p: ({ children }) => (
+            <p>
+              {React.Children.map(children, (child) => {
+                if (typeof child === 'string') {
+                  return <TextWithCitations text={child} citations={citations} />;
+                }
+                return child;
+              })}
+            </p>
+          ),
+          // Custom list item to handle citations
+          li: ({ children }) => (
+            <li>
+              {React.Children.map(children, (child) => {
+                if (typeof child === 'string') {
+                  return <TextWithCitations text={child} citations={citations} />;
+                }
+                return child;
+              })}
+            </li>
+          ),
+          // Style code
+          code: ({ children }) => (
+            <code className="bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded text-sm">
+              {children}
+            </code>
+          ),
+        }}
+      >
+        {processedText}
+      </ReactMarkdown>
+    </div>
+  );
 }
