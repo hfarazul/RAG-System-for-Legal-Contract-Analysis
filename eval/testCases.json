@@ -106,5 +106,35 @@
     "expectedChunks": ["vsa-s3"],
     "shouldContain": ["intellectual property", "infringement", "negligence"],
     "category": "simple-retrieval"
+  },
+  {
+    "id": "tc-016",
+    "query": "Do confidentiality obligations survive termination of the NDA?",
+    "expectedChunks": ["nda-s3"],
+    "shouldContain": ["survive", "five", "5 years"],
+    "category": "simple-retrieval"
+  },
+  {
+    "id": "tc-017",
+    "query": "What remedies are available if the SLA uptime is not met?",
+    "expectedChunks": ["sla-s2"],
+    "shouldContain": ["service credits", "remedy"],
+    "expectRiskFlag": true,
+    "category": "risk-detection"
+  },
+  {
+    "id": "tc-018",
+    "query": "What happens if Vendor delays breach notification beyond 72 hours?",
+    "expectedChunks": ["dpa-s3"],
+    "shouldContain": ["72 hours", "breach", "notify"],
+    "category": "simple-retrieval"
+  },
+  {
+    "id": "tc-019",
+    "query": "Summarize all risks for Acme Corp in one paragraph.",
+    "expectedChunks": ["nda-s4", "vsa-s4", "sla-s2", "dpa-s5"],
+    "shouldContain": ["liability", "risk"],
+    "expectRiskFlag": true,
+    "category": "cross-document"
   }
 ]

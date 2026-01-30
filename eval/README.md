@@ -1,0 +1,109 @@
+# Evaluation Framework
+
+## What We Evaluate
+
+### 1. Retrieval Quality
+- **Metric**: Recall (% of expected chunks retrieved)
+- **Test**: For each query, verify that expected document sections are in top-5 results
+- **Threshold**: 50% recall minimum to pass
+
+### 2. Answer Quality
+- **Metric**: Keyword presence
+- **Test**: Verify response contains expected keywords/phrases
+- **Example**: Query about "termination notice" should contain "30 days"
+
+### 3. Risk Flag Accuracy
+- **Metric**: Detection rate
+- **Test**: Queries about risky clauses should trigger ⚠️ risk flags
+- **Example**: "Is liability capped in NDA?" should flag HIGH liability risk
+
+### 4. Out-of-Scope Handling
+- **Metric**: Rejection accuracy
+- **Test**: Requests to draft contracts or provide legal advice should be refused
+- **Example**: "Can you draft a better NDA?" should be declined
+
+---
+
+## Why It Matters
+
+| Metric | Why It Matters |
+|--------|----------------|
+| **Retrieval Recall** | If wrong chunks are retrieved, the LLM cannot produce accurate answers. Retrieval is the foundation of RAG. |
+| **Answer Quality** | Users need factually correct answers with proper citations. Incorrect information could have legal consequences. |
+| **Risk Flagging** | The system's value proposition is proactive risk detection. Missing a liability gap defeats the purpose. |
+| **Out-of-Scope Rejection** | The system must not hallucinate legal advice or draft documents, which could expose users to liability. |
+
+---
+
+## Test Cases
+
+Total: **19 test cases**
+
+| Category | Count | Examples |
+|----------|-------|----------|
+| Simple Retrieval | 11 | "What is the uptime commitment?" |
+| Risk Detection | 4 | "Is liability capped in the NDA?" |
+| Cross-Document | 2 | "Are there conflicting governing laws?" |
+| Out-of-Scope | 2 | "Can you draft a better NDA?" |
+
+---
+
+## Running Evaluation
+
+```bash
+npm run eval
+```
+
+Output:
+```
+Retrieval Metrics:
+  Tests Passed: 17/17
+  Avg Recall: 100.0%
+
+Answer Metrics:
+  Tests Passed: 19/19
+  Risk Flag Accuracy: 100.0%
+  Out-of-Scope Accuracy: 100.0%
+
+Overall Score: 100.0%
+```
+
+---
+
+## Limitations
+
+### 1. Small Test Set
+- Only 19 test cases cannot cover all edge cases
+- No long-tail query testing
+- Limited adversarial examples
+
+### 2. LLM-as-Judge Bias
+- Claude evaluating Claude may be lenient
+- No human baseline comparison
+- Keyword matching is simplistic
+
+### 3. No Adversarial Testing
+- Not tested against prompt injection
+- No jailbreak attempts
+- No malformed input testing
+
+### 4. Static Evaluation
+- Single-turn queries only (no multi-turn evaluation)
+- No conversation quality metrics
+- No user satisfaction measurement
+
+### 5. Missing Metrics
+- **Latency**: Response time not measured
+- **Cost**: Token usage not tracked
+- **Faithfulness**: No hallucination detection beyond keyword checks
+- **Citation Accuracy**: Not verifying citations match content
+
+---
+
+## Future Improvements
+
+1. **LLM-as-Judge**: Use Claude to score faithfulness and relevance (1-5)
+2. **Human Evaluation**: Manual review of sample responses
+3. **Adversarial Testing**: Prompt injection, jailbreak attempts
+4. **Multi-turn Evaluation**: Test conversation coherence
+5. **Latency Benchmarks**: Measure p50/p95 response times

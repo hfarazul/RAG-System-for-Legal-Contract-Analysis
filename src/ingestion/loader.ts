@@ -1,3 +1,15 @@
+/**
+ * Document Loader Module
+ *
+ * Reads legal contract files from the /data directory and extracts metadata.
+ * Supports: NDA, VSA, SLA, DPA document types.
+ *
+ * Metadata extracted:
+ * - Document type (NDA, VSA, SLA, DPA)
+ * - Party names (from "between X and Y" pattern)
+ * - Governing law (from "governed by" clause)
+ */
+
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import type { RawDocument, DocMetadata, DocType } from '../types.js';

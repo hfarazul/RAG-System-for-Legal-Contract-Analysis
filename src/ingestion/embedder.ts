@@ -1,10 +1,19 @@
+/**
+ * Document Embedder Module
+ *
+ * Converts text chunks into vector embeddings using OpenAI's text-embedding-3-small.
+ * Uses Vercel AI SDK's embedMany() for efficient batch processing.
+ *
+ * Output: 1536-dimensional vectors for semantic similarity search.
+ */
+
 import { embedMany } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import type { Chunk, VectorEntry } from '../types.js';
 import { loadConfig } from '../config.js';
 
 /**
- * Embed all chunks using OpenAI embeddings
+ * Embed all chunks using OpenAI embeddings (batch processing)
  */
 export async function embedChunks(chunks: Chunk[]): Promise<VectorEntry[]> {
   const config = await loadConfig();

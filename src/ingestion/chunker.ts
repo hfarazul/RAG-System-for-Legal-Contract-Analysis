@@ -1,3 +1,15 @@
+/**
+ * Document Chunker Module
+ *
+ * Splits legal documents into semantic chunks based on section headers.
+ * Uses section-based chunking (not fixed-size) to preserve legal clause boundaries.
+ *
+ * Chunk format:
+ * - ID: {docType}-s{sectionNumber} (e.g., "nda-s3")
+ * - Text: Section content with optional document context prefix
+ * - Metadata: Document type, name, parties, governing law, section info
+ */
+
 import type { RawDocument, Chunk, ChunkMetadata, DocType } from '../types.js';
 import { loadConfig } from '../config.js';
 

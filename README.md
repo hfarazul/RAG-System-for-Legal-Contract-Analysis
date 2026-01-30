@@ -96,6 +96,46 @@ We chose a **single agent with tools** architecture instead of separate speciali
 
 ---
 
+## Design Choices & Trade-offs
+
+### 1. Chunking Strategy: Section-Based
+
+| Choice | Alternative | Rationale |
+|--------|-------------|-----------|
+| **Section-based** | Fixed-size (512 tokens) | Legal documents have natural semantic boundaries. Section-based chunking preserves complete clauses and enables precise citations like `[NDA, Section 3]`. Fixed-size would split mid-sentence and lose context. |
+
+### 2. Embedding Model: OpenAI `text-embedding-3-small`
+
+| Choice | Alternative | Rationale |
+|--------|-------------|-----------|
+| **text-embedding-3-small** | text-embedding-3-large | 5x cheaper with only 2% quality difference. 1536 dimensions provide good precision. For 21 chunks, we optimized for simplicity over marginal quality gains. |
+
+### 3. LLM: Claude Sonnet (Anthropic)
+
+| Choice | Alternative | Rationale |
+|--------|-------------|-----------|
+| **Claude Sonnet** | GPT-4, Llama via Ollama | Strong legal reasoning capability, excellent instruction following. Temperature set to 0.1 for deterministic, consistent responses. Vercel AI SDK enables easy provider switching. |
+
+### 4. Vector Store: In-Memory + JSON
+
+| Choice | Alternative | Rationale |
+|--------|-------------|-----------|
+| **In-Memory + JSON** | ChromaDB, Pinecone | Zero external dependencies, instant startup, trivial debugging. Perfect for 21 chunks. Demonstrates core RAG mechanics without infrastructure overhead. Not production-scale. |
+
+### 5. Architecture: Single Agent with Tools
+
+| Choice | Alternative | Rationale |
+|--------|-------------|-----------|
+| **Single agent** | Separate Analyzer + Risk Assessor | Avoids over-agentification. Risk flagging integrated into main agent enables proactive detection without requiring explicit user requests. Simpler conversation flow. |
+
+### 6. Retrieval: Pure Semantic Search
+
+| Choice | Alternative | Rationale |
+|--------|-------------|-----------|
+| **Cosine similarity** | Hybrid (BM25 + semantic) | Simpler implementation, sufficient for small corpus. Trade-off: may miss exact keyword matches like "72 hours". Hybrid search would be a production enhancement. |
+
+---
+
 ## Known Limitations
 
 ### 1. Scale Limitations

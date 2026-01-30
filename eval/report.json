@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-01-30T18:27:24.052Z",
+  "timestamp": "2026-01-30T19:35:02.748Z",
   "retrievalResults": [
     {
       "testId": "tc-001",
@@ -224,15 +224,86 @@
       "precision": 0.2,
       "recall": 1,
       "passed": true
+    },
+    {
+      "testId": "tc-016",
+      "query": "Do confidentiality obligations survive termination of the NDA?",
+      "expectedChunks": [
+        "nda-s3"
+      ],
+      "retrievedChunks": [
+        "nda-s3",
+        "nda-s2",
+        "nda-s1",
+        "nda-s4",
+        "nda-s5"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-017",
+      "query": "What remedies are available if the SLA uptime is not met?",
+      "expectedChunks": [
+        "sla-s2"
+      ],
+      "retrievedChunks": [
+        "sla-s2",
+        "sla-s3",
+        "sla-s1",
+        "sla-s4",
+        "vsa-s5"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-018",
+      "query": "What happens if Vendor delays breach notification beyond 72 hours?",
+      "expectedChunks": [
+        "dpa-s3"
+      ],
+      "retrievedChunks": [
+        "dpa-s3",
+        "vsa-s5",
+        "nda-s4",
+        "vsa-s4",
+        "sla-s4"
+      ],
+      "precision": 0.2,
+      "recall": 1,
+      "passed": true
+    },
+    {
+      "testId": "tc-019",
+      "query": "Summarize all risks for Acme Corp in one paragraph.",
+      "expectedChunks": [
+        "nda-s4",
+        "vsa-s4",
+        "sla-s2",
+        "dpa-s5"
+      ],
+      "retrievedChunks": [
+        "nda-s4",
+        "nda-s2",
+        "sla-s4",
+        "nda-s5",
+        "nda-s1"
+      ],
+      "precision": 0.2,
+      "recall": 0.25,
+      "passed": false
     }
   ],
   "answerResults": [
     {
       "testId": "tc-001",
       "query": "What is the notice period for terminating the NDA?",
-      "response": "Based on the NDA provisions, the notice period for terminating the agreement is **thirty (30) days written notice** [Non-Disclosure Agreement, Section 3: Term and Termination].\n\nThe termination clause specifies that \"Either party may terminate this Agreement with thirty (30) days written notice\" [Non-Disclosure Agreement, Section 3: Term and Termination].\n\nIt's important to note that while the agreement can be terminated with 30 days' notice, the confidentiality obligations continue beyond termi...",
+      "response": "The notice period for terminating the NDA is **thirty (30) days written notice** [Non-Disclosure Agreement, Section 3: Term and Termination]. Either party may terminate the agreement with this notice period.\n\n⚠️ CONFLICT: MEDIUM\n   Different termination notice periods exist across agreements:\n   - NDA: 30 days written notice [NDA, Section 3: Term and Termination]\n   - VSA: 60 days written notice for convenience termination [VSA, Section 5: Termination]\n   \n   This inconsistency could create conf...",
       "containsExpected": true,
-      "hasRiskFlag": false,
+      "hasRiskFlag": true,
       "expectRiskFlag": false,
       "refusedCorrectly": true,
       "shouldRefuse": false,
@@ -241,7 +312,7 @@
     {
       "testId": "tc-002",
       "query": "What is the uptime commitment in the SLA?",
-      "response": "Based on the Service Level Agreement, the uptime commitment is **99.5% monthly uptime** [Service Level Agreement, Section 1: Service Availability].\n\nThe SLA also specifies that certain types of downtime are excluded from uptime calculations, including:\n- Scheduled maintenance\n- Force majeure events  \n- Customer misconfiguration\n\n[Service Level Agreement, Section 3: Exclusions]\n\nIf the vendor fails to meet the 99.5% uptime threshold, they must provide service credits as defined in Schedule B, and...",
+      "response": "The Service Level Agreement commits to **99.5% monthly uptime** [Service Level Agreement, Section 1: Service Availability].\n\nIf the uptime falls below this threshold, the vendor will provide service credits as defined in Schedule B, and these service credits are stated as \"the sole and exclusive remedy\" [Service Level Agreement, Section 2: Service Credits].\n\nThe uptime calculation excludes certain types of downtime including:\n- Scheduled maintenance\n- Force majeure events  \n- Customer misconfigu...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": false,
@@ -252,9 +323,9 @@
     {
       "testId": "tc-003",
       "query": "Which law governs the Vendor Services Agreement?",
-      "response": "The Vendor Services Agreement is governed by the laws of **England and Wales** [Vendor Services Agreement, Section 6: Governing Law].\n\nThis means that any disputes arising from the agreement will be interpreted and resolved according to English and Welsh legal principles and statutes.",
+      "response": "The Vendor Services Agreement is governed by the **laws of England and Wales** [Vendor Services Agreement, Section 6: Governing Law].\n\n⚠️ CONFLICT: HIGH\n   The agreements have different governing laws which may create jurisdictional conflicts:\n   - NDA: California, USA [Non-Disclosure Agreement, Section 5: Governing Law]\n   - VSA: England and Wales [Vendor Services Agreement, Section 6: Governing Law]  \n   - DPA: European Union (GDPR) and local member state law [Data Processing Agreement, Sectio...",
       "containsExpected": true,
-      "hasRiskFlag": false,
+      "hasRiskFlag": true,
       "expectRiskFlag": false,
       "refusedCorrectly": true,
       "shouldRefuse": false,
@@ -263,7 +334,7 @@
     {
       "testId": "tc-004",
       "query": "Is liability capped in the NDA?",
-      "response": "Based on my analysis of the NDA, **liability is not capped**. The agreement states that \"The Receiving Party shall be liable for damages arising from breach of this Agreement\" but explicitly notes that \"No explicit limitation of liability is specified\" [Non-Disclosure Agreement, Section 4: Liability].\n\n⚠️ **RISK: LIABILITY (HIGH)**\n   No liability cap exposes both parties to unlimited financial risk in case of breach of confidentiality obligations. This creates significant exposure for damages t...",
+      "response": "**No, liability is not capped in the NDA.** The agreement states that \"The Receiving Party shall be liable for damages arising from breach of this Agreement\" but explicitly notes that \"No explicit limitation of liability is specified\" [Non-Disclosure Agreement, Section 4: Liability].\n\n⚠️ **RISK: LIABILITY (HIGH)**\n   The NDA exposes both parties to unlimited financial risk in case of breach, as there is no monetary cap on damages.\n   Citation: [Non-Disclosure Agreement, Section 4: Liability]\n\n⚠️...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": true,
@@ -274,7 +345,7 @@
     {
       "testId": "tc-005",
       "query": "What is the data breach notification timeline?",
-      "response": "Based on the contract analysis, here are the data breach notification timeline requirements:\n\n## Data Breach Notification Timeline\n\nThe Data Processing Agreement establishes the following notification requirements in case of a personal data breach:\n\n1. **Primary Requirement**: The Processor shall notify the Controller \"without undue delay\" [Data Processing Agreement, Section 3: Data Breach Notification]\n\n2. **Maximum Timeline**: In any case, notification must occur within **72 hours** of becomin...",
+      "response": "Based on my search of the contracts, here are the data breach notification timeline requirements:\n\n## Data Breach Notification Timeline\n\nThe **Data Processing Agreement** establishes specific notification requirements for personal data breaches:\n\n- **Processor must notify Controller without undue delay**\n- **Maximum timeline: 72 hours** from becoming aware of the breach\n\n[Data Processing Agreement, Section 3: Data Breach Notification]\n\n⚠️ **RISK: COMPLIANCE (MEDIUM)**\n   The DPA only covers pers...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": false,
@@ -285,7 +356,7 @@
     {
       "testId": "tc-006",
       "query": "Can Vendor XYZ use subprocessors?",
-      "response": "Based on the contract analysis, **yes, Vendor XYZ can use subprocessors, but with restrictions**.\n\nAccording to the Data Processing Agreement, Vendor XYZ (the Processor) may engage subprocessors, but only \"with prior written authorization\" [Data Processing Agreement, Section 4: Subprocessors].\n\nThis means:\n- Vendor XYZ cannot unilaterally decide to use subprocessors\n- They must obtain written approval from Acme Corp before engaging any subprocessor\n- Each subprocessor engagement requires separat...",
+      "response": "Based on my search of the contracts, here's what I found regarding Vendor XYZ's use of subprocessors:\n\n**Yes, Vendor XYZ may use subprocessors, but with restrictions:**\n\nThe Data Processing Agreement explicitly allows Vendor XYZ (as the Processor) to engage subprocessors, but **only with prior written authorization** [Data Processing Agreement, Section 4: Subprocessors].\n\n⚠️ **RISK: COMPLIANCE (MEDIUM)**\n   The subprocessor clause is very brief and lacks important GDPR-required details such as:\n...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": false,
@@ -296,7 +367,7 @@
     {
       "testId": "tc-007",
       "query": "What are the SLA exclusions?",
-      "response": "Based on the Service Level Agreement, the following events are excluded from SLA coverage:\n\n## SLA Exclusions\n\nThe SLA specifically excludes the following circumstances from uptime calculations [Service Level Agreement, Section 3: Exclusions]:\n\n1. **Scheduled maintenance** - Planned downtime for system updates and maintenance\n2. **Force majeure events** - Extraordinary circumstances beyond the vendor's control (natural disasters, wars, etc.)\n3. **Customer misconfiguration** - Downtime caused by ...",
+      "response": "The SLA exclusions are clearly defined in Section 3 of the Service Level Agreement. The following types of downtime are **excluded from uptime calculations**:\n\n1. **Scheduled maintenance**\n2. **Force majeure events** \n3. **Customer misconfiguration**\n\n[Service Level Agreement, Section 3: Exclusions]\n\n⚠️ RISK: OPERATIONAL (MEDIUM)\n   The exclusions are quite broad and could potentially be interpreted liberally by the vendor:\n   - \"Scheduled maintenance\" has no defined limits on frequency or durat...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": false,
@@ -307,7 +378,7 @@
     {
       "testId": "tc-008",
       "query": "What is the liability cap in the Vendor Services Agreement?",
-      "response": "Based on the Vendor Services Agreement, the liability cap is set at **the total fees paid in the preceding 12 months** [Vendor Services Agreement, Section 4: Limitation of Liability].\n\nHowever, this limitation has important exceptions. The liability cap does not apply to:\n- Indemnification obligations \n- Gross negligence\n\n[Vendor Services Agreement, Section 4: Limitation of Liability]\n\nThe agreement also includes indemnification provisions where the Vendor must indemnify Acme Corp for third-part...",
+      "response": "The Vendor Services Agreement includes a liability cap of **12 months' fees**. Specifically, each party's total liability shall not exceed the total fees paid in the preceding 12 months [Vendor Services Agreement, Section 4: Limitation of Liability].\n\n**Important exceptions:** This liability cap does not apply to:\n- Indemnification obligations [Vendor Services Agreement, Section 4: Limitation of Liability]\n- Gross negligence [Vendor Services Agreement, Section 4: Limitation of Liability]\n\n⚠️ RIS...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": false,
@@ -318,7 +389,7 @@
     {
       "testId": "tc-009",
       "query": "Are there conflicting governing laws across agreements?",
-      "response": "Based on my search of the contracts, I found significant conflicts in governing law clauses across the agreements:\n\n## Governing Law Analysis\n\n**Yes, there are conflicting governing laws across the agreements:**\n\n1. **Non-Disclosure Agreement**: Governed by the laws of the State of California, USA [Non-Disclosure Agreement, Section 5: Governing Law]\n\n2. **Vendor Services Agreement**: Governed by the laws of England and Wales [Vendor Services Agreement, Section 6: Governing Law]\n\n3. **Data Proces...",
+      "response": "Yes, there are **significant conflicts** in governing laws across the agreements between Acme Corp and Vendor XYZ:\n\n## Governing Law by Agreement:\n\n1. **Non-Disclosure Agreement**: Governed by the laws of the **State of California, USA** [Non-Disclosure Agreement, Section 5: Governing Law]\n\n2. **Vendor Services Agreement**: Governed by the laws of **England and Wales** [Vendor Services Agreement, Section 6: Governing Law]\n\n3. **Data Processing Agreement**: Governed by the laws of the **European ...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": true,
@@ -329,7 +400,7 @@
     {
       "testId": "tc-010",
       "query": "What happens if confidentiality is breached?",
-      "response": "Based on the contract analysis, here's what happens if confidentiality is breached:\n\n## Consequences of Confidentiality Breach\n\n**Monetary Damages:**\nThe Receiving Party is liable for damages arising from breach of the NDA [Non-Disclosure Agreement, Section 4: Liability]. However, the agreement does not specify what types of damages can be recovered or provide any calculation methodology.\n\n**Notification Requirements:**\nIf the breach involves personal data, there are specific notification obliga...",
+      "response": "Based on the contract analysis, here's what happens if confidentiality is breached:\n\n## Consequences of Confidentiality Breach\n\n**Liability for Damages**: The Receiving Party shall be liable for damages arising from breach of the NDA [Non-Disclosure Agreement, Section 4: Liability]. However, the agreement does not specify the types of damages or calculation methods.\n\n**Survival of Obligations**: Even after the NDA terminates, confidentiality obligations continue for **five (5) years** [Non-Discl...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": false,
@@ -340,9 +411,9 @@
     {
       "testId": "tc-011",
       "query": "How long do confidentiality obligations survive after NDA termination?",
-      "response": "Based on the NDA between Acme Corp and Vendor XYZ Pvt, confidentiality obligations survive termination for **five (5) years** [Non-Disclosure Agreement, Section 3: Term and Termination].\n\nThe NDA specifies that while the main agreement has a three-year term and can be terminated with 30 days written notice, the confidentiality obligations continue beyond the termination date for an additional five years [Non-Disclosure Agreement, Section 3: Term and Termination].\n\nThis means that even after the ...",
+      "response": "Based on the NDA, confidentiality obligations **survive termination for five (5) years** [Non-Disclosure Agreement, Section 3: Term and Termination].\n\nThis means that even after the NDA expires (which occurs after 3 years) or is terminated by either party (with 30 days written notice), both parties must continue to protect each other's confidential information for an additional 5 years from the termination date.\n\nThe survival period covers all confidentiality obligations outlined in Section 2, i...",
       "containsExpected": true,
-      "hasRiskFlag": false,
+      "hasRiskFlag": true,
       "expectRiskFlag": false,
       "refusedCorrectly": true,
       "shouldRefuse": false,
@@ -351,7 +422,7 @@
     {
       "testId": "tc-012",
       "query": "What are the service credits in the SLA?",
-      "response": "Based on my search of the SLA document, here's what I found regarding service credits:\n\nThe SLA establishes a service credit framework tied to uptime performance. According to the agreement:\n\n**Service Credit Trigger**: Service credits are provided when uptime falls below the agreed threshold of 99.5% monthly uptime [Service Level Agreement, Section 1: Service Availability] and [Service Level Agreement, Section 2: Service Credits].\n\n**Service Credit Details**: The specific service credit amounts...",
+      "response": "Based on the SLA document, here's what I found regarding service credits:\n\n**Service Credits Overview:**\nThe SLA establishes that if uptime falls below the agreed threshold of 99.5% monthly uptime [SLA, Section 1: Service Availability], the vendor shall provide service credits as compensation [SLA, Section 2: Service Credits].\n\n**Key Details:**\n- **Trigger:** Service credits apply when uptime falls below 99.5% monthly [SLA, Section 1: Service Availability]\n- **Compensation:** Service credits are...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": true,
@@ -362,7 +433,7 @@
     {
       "testId": "tc-013",
       "query": "Can you draft a better NDA for me?",
-      "response": "I cannot draft, write, or create new contract language for you. My role is limited to analyzing existing contracts in the system - I can help you understand terms, identify risks, compare clauses, and retrieve specific sections from NDAs, Service Level Agreements, Data Processing Agreements, and Vendor Services Agreements.\n\nIf you have questions about an existing NDA, I'd be happy to help analyze it. For example, I can:\n- Explain specific clauses and their implications\n- Identify potential risks...",
+      "response": "I cannot draft, write, or create new contract language for you. My role is limited to analyzing existing contracts in your document set.\n\nI can help you with:\n- Analyzing the current NDA's terms and provisions\n- Identifying potential risks or gaps in the existing NDA\n- Comparing the NDA with your other agreements (VSA, SLA, DPA)\n- Finding specific clauses or sections within the contracts\n- Explaining what the current NDA covers\n\nIf you'd like me to analyze your existing NDA or compare it with in...",
       "containsExpected": true,
       "hasRiskFlag": false,
       "expectRiskFlag": false,
@@ -373,7 +444,7 @@
     {
       "testId": "tc-014",
       "query": "What legal strategy should Acme take against Vendor XYZ?",
-      "response": "I cannot provide legal strategy recommendations or advice. My role is limited to analyzing existing contracts - I can help you understand what the current agreements say, identify key terms, obligations, and potential risks, but I cannot advise on legal strategies or courses of action.\n\nIf you'd like, I can help you with contract analysis tasks such as:\n- Reviewing specific clauses in your agreements with Vendor XYZ\n- Identifying relevant terms related to disputes, termination, or breach\n- Findi...",
+      "response": "I cannot provide legal strategy recommendations or advice. My role is limited to analyzing the existing contracts in our system - specifically NDAs, Vendor Services Agreements, Service Level Agreements, and Data Processing Agreements.\n\nI can help you with contract analysis tasks such as:\n- Finding specific clauses and terms in your agreements\n- Identifying obligations and liabilities\n- Comparing terms across different documents\n- Flagging potential risks or conflicts in contract language\n- Retri...",
       "containsExpected": true,
       "hasRiskFlag": false,
       "expectRiskFlag": false,
@@ -384,23 +455,67 @@
     {
       "testId": "tc-015",
       "query": "What indemnification obligations does Vendor have?",
-      "response": "Based on my search of the contracts, here are the Vendor's indemnification obligations:\n\n## Vendor's Indemnification Obligations\n\nThe Vendor has specific indemnification obligations outlined in the Vendor Services Agreement. The Vendor agrees to **indemnify, defend, and hold harmless** Acme Corp from any third-party claims arising from:\n\n1. **Intellectual property infringement**\n2. **Vendor's negligence or willful misconduct**\n\n[Vendor Services Agreement, Section 3: Indemnification]\n\n## Importan...",
+      "response": "Based on my search of the contracts, here are the Vendor's indemnification obligations:\n\n## Vendor's Indemnification Obligations\n\nThe Vendor has specific indemnification obligations outlined in the **Vendor Services Agreement**. The Vendor agrees to **indemnify, defend, and hold harmless** Acme Corp from any third-party claims arising from:\n\n1. **Intellectual property infringement**\n2. **Vendor's negligence or willful misconduct**\n\n[Vendor Services Agreement, Section 3: Indemnification]\n\n## Impo...",
       "containsExpected": true,
       "hasRiskFlag": true,
       "expectRiskFlag": false,
       "refusedCorrectly": true,
       "shouldRefuse": false,
       "passed": true
+    },
+    {
+      "testId": "tc-016",
+      "query": "Do confidentiality obligations survive termination of the NDA?",
+      "response": "Yes, confidentiality obligations **do survive termination** of the NDA. Specifically, the agreement states that \"**Confidentiality obligations shall survive termination for five (5) years**\" [Non-Disclosure Agreement, Section 3: Term and Termination].\n\nThis means that even after the NDA is terminated (either after its 3-year term expires or through early termination with 30 days' written notice), both parties must continue to:\n- Use Confidential Information solely for the permitted business purp...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true
+    },
+    {
+      "testId": "tc-017",
+      "query": "What remedies are available if the SLA uptime is not met?",
+      "response": "Based on the SLA contract, here are the available remedies if the uptime requirement is not met:\n\n## Available Remedies\n\n**Service Credits**: If uptime falls below the agreed 99.5% monthly threshold, the Vendor shall provide service credits as defined in Schedule B [SLA, Section 2: Service Credits].\n\n**Exclusive Remedy**: The service credits are explicitly stated as \"the sole and exclusive remedy\" for uptime failures [SLA, Section 2: Service Credits].\n\n## SLA Requirements\n\nThe Vendor must ensure...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": true,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true
+    },
+    {
+      "testId": "tc-018",
+      "query": "What happens if Vendor delays breach notification beyond 72 hours?",
+      "response": "Based on my search of the contracts, here's what happens if the Vendor delays breach notification beyond 72 hours:\n\n## Direct Consequences\n\nThe Data Processing Agreement establishes a **mandatory 72-hour notification requirement** for personal data breaches, stating that \"notification shall occur within 72 hours of becoming aware of the breach\" [Data Processing Agreement, Section 3: Data Breach Notification].\n\nHowever, **the contracts do not specify explicit penalties or consequences** for faili...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": false,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true
+    },
+    {
+      "testId": "tc-019",
+      "query": "Summarize all risks for Acme Corp in one paragraph.",
+      "response": "Based on my analysis of all contracts, Acme Corp faces several significant risks across multiple areas. **The most critical exposure is unlimited liability under the NDA, which lacks any monetary cap and could result in substantial financial damages** [Non-Disclosure Agreement, Section 4: Liability]. **Jurisdictional conflicts create legal complexity as the agreements are governed by three different legal frameworks - California law (NDA), England and Wales law (VSA), and EU law (DPA)** [Non-Dis...",
+      "containsExpected": true,
+      "hasRiskFlag": true,
+      "expectRiskFlag": true,
+      "refusedCorrectly": true,
+      "shouldRefuse": false,
+      "passed": true
     }
   ],
   "summary": {
-    "totalTests": 15,
-    "retrievalTests": 13,
-    "retrievalPassed": 13,
-    "avgPrecision": 0.24615384615384617,
-    "avgRecall": 1,
-    "answerTests": 15,
-    "answerPassed": 15,
+    "totalTests": 19,
+    "retrievalTests": 17,
+    "retrievalPassed": 16,
+    "avgPrecision": 0.23529411764705888,
+    "avgRecall": 0.9558823529411765,
+    "answerTests": 19,
+    "answerPassed": 19,
     "riskFlagAccuracy": 1,
     "outOfScopeAccuracy": 1
   }
