@@ -3,6 +3,7 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import { retrieveChunks } from '../src/retrieval/retriever.js';
 import { getAnalyzerAgent } from '../src/agents/analyzer.js';
+import { judgeResponse, calculateAverageScores, type JudgeScores } from './llmJudge.js';
 
 interface TestCase {
   id: string;
@@ -37,6 +38,7 @@ interface AnswerResult {
   refusedCorrectly: boolean;
   shouldRefuse: boolean;
   passed: boolean;
+  llmScores?: JudgeScores;
 }
 
 interface MultiTurnResult {
@@ -66,6 +68,12 @@ interface EvaluationReport {
     outOfScopeAccuracy: number;
     multiTurnTests: number;
     multiTurnPassed: number;
+    llmJudge?: {
+      avgFaithfulness: number;
+      avgRelevance: number;
+      avgCompleteness: number;
+      avgCitationAccuracy: number;
+    };
   };
 }
 
@@ -128,10 +136,13 @@ async function evaluateRetrieval(testCases: TestCase[]): Promise<RetrievalResult
 /**
  * Evaluate answer quality
  */
-async function evaluateAnswers(testCases: TestCase[]): Promise<AnswerResult[]> {
+async function evaluateAnswers(testCases: TestCase[], useLlmJudge: boolean = true): Promise<AnswerResult[]> {
   const results: AnswerResult[] = [];
 
   console.log(`\nEvaluating answers (${testCases.length} tests)...`);
+  if (useLlmJudge) {
+    console.log('  (Using GPT-4o as judge)');
+  }
 
   const agent = await getAnalyzerAgent();
 
@@ -141,7 +152,12 @@ async function evaluateAnswers(testCases: TestCase[]): Promise<AnswerResult[]> {
     // Clear history for each test
     agent.clearHistory();
 
-    const response = await agent.chatSync(tc.query);
+    // Get retrieved context for the judge
+    // Note: This retrieves the same top-5 chunks the agent would use
+    const retrieved = await retrieveChunks(tc.query!, { topK: 5 });
+    const context = retrieved.map(r => `${r.citation}\n${r.text}`).join('\n\n---\n\n');
+
+    const response = await agent.chatSync(tc.query!);
     const responseLower = response.toLowerCase();
 
     // Check if response contains expected keywords
@@ -171,6 +187,13 @@ async function evaluateAnswers(testCases: TestCase[]): Promise<AnswerResult[]> {
                    (!shouldRefuse || refusedCorrectly) &&
                    (!expectRiskFlag || hasRiskFlag);
 
+    // LLM Judge evaluation (skip for out-of-scope tests)
+    let llmScores: JudgeScores | undefined;
+    if (useLlmJudge && !shouldRefuse) {
+      llmScores = await judgeResponse(tc.query!, response, context);
+      process.stdout.write(` [Judge: F${llmScores.faithfulness}/R${llmScores.relevance}/C${llmScores.completeness}/A${llmScores.citationAccuracy}]`);
+    }
+
     results.push({
       testId: tc.id,
       query: tc.query,
@@ -181,9 +204,10 @@ async function evaluateAnswers(testCases: TestCase[]): Promise<AnswerResult[]> {
       refusedCorrectly,
       shouldRefuse,
       passed,
+      llmScores,
     });
 
-    console.log(passed ? '✓' : '✗');
+    console.log(passed ? ' ✓' : ' ✗');
   }
 
   return results;
@@ -269,6 +293,20 @@ function generateReport(
     ? outOfScopeTests.filter(r => r.refusedCorrectly).length / outOfScopeTests.length
     : 1;
 
+  // Calculate LLM judge averages
+  const resultsWithScores = answerResults.filter(r => r.llmScores);
+  let llmJudge: EvaluationReport['summary']['llmJudge'];
+
+  if (resultsWithScores.length > 0) {
+    const avgScores = calculateAverageScores(resultsWithScores.map(r => r.llmScores!));
+    llmJudge = {
+      avgFaithfulness: avgScores.faithfulness,
+      avgRelevance: avgScores.relevance,
+      avgCompleteness: avgScores.completeness,
+      avgCitationAccuracy: avgScores.citationAccuracy,
+    };
+  }
+
   return {
     timestamp: new Date().toISOString(),
     retrievalResults,
@@ -286,6 +324,7 @@ function generateReport(
       outOfScopeAccuracy,
       multiTurnTests: multiTurnResults.length,
       multiTurnPassed: multiTurnResults.filter(r => r.passed).length,
+      llmJudge,
     },
   };
 }
@@ -315,16 +354,29 @@ function printSummary(report: EvaluationReport): void {
     console.log(`  Tests Passed: ${summary.multiTurnPassed}/${summary.multiTurnTests}`);
   }
 
+  if (summary.llmJudge) {
+    console.log('\nLLM Judge Scores (GPT-4o):');
+    console.log(`  Avg Faithfulness:      ${summary.llmJudge.avgFaithfulness.toFixed(2)}/5`);
+    console.log(`  Avg Relevance:         ${summary.llmJudge.avgRelevance.toFixed(2)}/5`);
+    console.log(`  Avg Completeness:      ${summary.llmJudge.avgCompleteness.toFixed(2)}/5`);
+    console.log(`  Avg Citation Accuracy: ${summary.llmJudge.avgCitationAccuracy.toFixed(2)}/5`);
+  }
+
   console.log('\nOverall:');
   const multiTurnScore = summary.multiTurnTests > 0
     ? (summary.multiTurnPassed / summary.multiTurnTests)
     : 1;
+  const llmJudgeScore = summary.llmJudge
+    ? (summary.llmJudge.avgFaithfulness + summary.llmJudge.avgRelevance +
+       summary.llmJudge.avgCompleteness + summary.llmJudge.avgCitationAccuracy) / 20
+    : 1;
   const overallScore = (
-    (summary.retrievalPassed / summary.retrievalTests) * 0.25 +
-    (summary.answerPassed / summary.answerTests) * 0.45 +
-    summary.riskFlagAccuracy * 0.1 +
-    summary.outOfScopeAccuracy * 0.1 +
-    multiTurnScore * 0.1
+    (summary.retrievalPassed / summary.retrievalTests) * 0.20 +
+    (summary.answerPassed / summary.answerTests) * 0.35 +
+    summary.riskFlagAccuracy * 0.10 +
+    summary.outOfScopeAccuracy * 0.10 +
+    multiTurnScore * 0.05 +
+    llmJudgeScore * 0.20
   ) * 100;
   console.log(`  Score: ${overallScore.toFixed(1)}%`);
 

@@ -107,8 +107,15 @@ Overall Score: 100.0%
 ### 5. Missing Metrics
 - **Latency**: Response time not measured
 - **Cost**: Token usage not tracked
-- **Faithfulness**: No hallucination detection beyond keyword checks
-- **Citation Accuracy**: Not verifying citations match content
+
+### Note on LLM Judge
+We now use GPT-4o as an independent judge to score:
+- **Faithfulness**: Does response match retrieved context?
+- **Relevance**: Does response address the question?
+- **Completeness**: Are all parts answered?
+- **Citation Accuracy**: Do citations match content?
+
+This provides unbiased evaluation (different model family than Claude).
 
 ---
 
