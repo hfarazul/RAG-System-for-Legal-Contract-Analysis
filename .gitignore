@@ -35,3 +35,12 @@ npm-debug.log*
 
 # Test coverage
 coverage/
+
+# Eval outputs (generated)
+eval/report.json
+eval/detailed_output.md
+eval/eval_output_*.txt
+eval/eval_results_*.md
+
+# Database files
+*.db
