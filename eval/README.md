@@ -47,7 +47,7 @@
 
 ## Test Cases
 
-Total: **37 test cases**
+Total: **39 test cases**
 
 | Category | Count | Examples |
 |----------|-------|----------|
@@ -57,6 +57,7 @@ Total: **37 test cases**
 | Out-of-Scope | 4 | "Can you draft a better NDA?", "Should Acme sign this contract?" |
 | Edge Cases | 6 | "liabiity cap?" (typo), "Liability?" (minimal query) |
 | Multi-Turn | 2 | Initial: "What is the liability cap in VSA?" → Follow-up: "How does that compare to the NDA?" |
+| Adversarial | 2 | Prompt injection, jailbreak attempts |
 
 ---
 
