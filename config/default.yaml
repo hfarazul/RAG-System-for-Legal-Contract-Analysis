@@ -27,3 +27,10 @@ vector_store:
 
 prompts:
   analyzer: ./config/prompts/analyzer.txt
+
+# Real-time evaluation settings
+evaluation:
+  enabled: true
+  sample_rate: 0.1        # Evaluate 10% of requests
+  flag_threshold: 3       # Flag responses with any score below this
+  max_stored: 1000        # Maximum evaluations to keep

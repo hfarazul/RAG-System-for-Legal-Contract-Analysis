@@ -1,8 +1,9 @@
 import { streamText, stepCountIs, convertToModelMessages } from 'ai';
 import { anthropic } from '@ai-sdk/anthropic';
 import { z } from 'zod';
-import { createRetrievalTool } from '@/lib/retriever';
+import { createRetrievalTool, retrieveChunks } from '@/lib/retriever';
 import { getAnalyzerPrompt, loadConfig } from '@/lib/config';
+import { shouldEvaluate, queueEvaluation } from '@/lib/evaluation';
 
 export const maxDuration = 60;
 
@@ -103,8 +104,16 @@ export async function POST(req: Request) {
   const systemPrompt = await getAnalyzerPrompt();
   const retrievalTool = await createRetrievalTool();
 
+  // Extract the latest user query for evaluation
+  const latestUserMessage = messages
+    .filter(m => m.role === 'user')
+    .pop();
+  const userQuery = latestUserMessage?.parts
+    ?.find(p => p.type === 'text')?.text || '';
+
   // Convert UIMessages (with parts) to ModelMessages (with content)
-  const modelMessages = await convertToModelMessages(messages);
+  // Type assertion needed due to Zod's passthrough() creating index signatures
+  const modelMessages = await convertToModelMessages(messages as Parameters<typeof convertToModelMessages>[0]);
 
   const result = streamText({
     model: anthropic(config.llm.model),
@@ -116,6 +125,24 @@ export async function POST(req: Request) {
     stopWhen: stepCountIs(5),
     temperature: config.llm.temperature,
     maxOutputTokens: config.llm.max_tokens,
+
+    // Async evaluation hook - runs after response completes
+    onFinish: async ({ text }) => {
+      if (userQuery && await shouldEvaluate()) {
+        try {
+          // Get the context that was retrieved for this query
+          const retrieved = await retrieveChunks(userQuery, { topK: 5 });
+          const context = retrieved
+            .map(r => `${r.citation}\n${r.content}`)
+            .join('\n\n---\n\n');
+
+          // Queue for async evaluation (non-blocking)
+          queueEvaluation({ query: userQuery, response: text, context });
+        } catch (error) {
+          console.error('[Eval] Failed to queue evaluation:', error);
+        }
+      }
+    },
   });
 
   return result.toUIMessageStreamResponse();
