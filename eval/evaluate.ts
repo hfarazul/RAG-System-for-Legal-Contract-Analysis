@@ -32,6 +32,8 @@ interface AnswerResult {
   testId: string;
   query: string;
   response: string;
+  fullResponse: string;  // Full untruncated response
+  context: string;       // Retrieved context
   refusedCorrectly: boolean;
   shouldRefuse: boolean;
   passed: boolean;
@@ -43,7 +45,10 @@ interface MultiTurnResult {
   initialQuery: string;
   followUp: string;
   initialResponse: string;
+  fullInitialResponse: string;  // Full untruncated
   followUpResponse: string;
+  fullFollowUpResponse: string; // Full untruncated
+  context: string;              // Retrieved context
   passed: boolean;
   llmScores?: JudgeScores;
 }
@@ -183,6 +188,8 @@ async function evaluateAnswers(testCases: TestCase[], useLlmJudge: boolean = tru
       testId: tc.id,
       query: tc.query,
       response: response.slice(0, 500) + (response.length > 500 ? '...' : ''),
+      fullResponse: response,
+      context,
       refusedCorrectly,
       shouldRefuse,
       passed,
@@ -239,7 +246,10 @@ async function evaluateMultiTurn(testCases: TestCase[]): Promise<MultiTurnResult
       initialQuery: tc.initialQuery!,
       followUp: tc.followUp!,
       initialResponse: initialResponse.slice(0, 300) + (initialResponse.length > 300 ? '...' : ''),
+      fullInitialResponse: initialResponse,
       followUpResponse: followUpResponse.slice(0, 300) + (followUpResponse.length > 300 ? '...' : ''),
+      fullFollowUpResponse: followUpResponse,
+      context,
       passed,
       llmScores,
     });
@@ -389,6 +399,68 @@ async function main() {
   const reportPath = path.join(process.cwd(), 'eval', 'report.json');
   await fs.writeFile(reportPath, JSON.stringify(report, null, 2));
   console.log(`\nFull report saved to: ${reportPath}`);
+
+  // Save detailed output with full prompts and responses
+  const detailedOutput: string[] = [];
+  detailedOutput.push('# Detailed Evaluation Output');
+  detailedOutput.push(`Generated: ${new Date().toISOString()}`);
+  detailedOutput.push('');
+
+  // Answer results with full details
+  detailedOutput.push('## Answer Tests\n');
+  for (const result of report.answerResults) {
+    detailedOutput.push(`### ${result.testId} ${result.passed ? '✓' : '✗'}`);
+    detailedOutput.push(`**Category:** ${testCases.find(tc => tc.id === result.testId)?.category || 'unknown'}`);
+    detailedOutput.push(`**Query:** ${result.query}`);
+    if (result.llmScores) {
+      detailedOutput.push(`**LLM Judge:** F${result.llmScores.faithfulness}/R${result.llmScores.relevance}/C${result.llmScores.completeness}/A${result.llmScores.citationAccuracy}`);
+    }
+    detailedOutput.push('');
+    detailedOutput.push('**Retrieved Context:**');
+    detailedOutput.push('```');
+    detailedOutput.push(result.context || '(no context)');
+    detailedOutput.push('```');
+    detailedOutput.push('');
+    detailedOutput.push('**Response:**');
+    detailedOutput.push('```');
+    detailedOutput.push(result.fullResponse || result.response);
+    detailedOutput.push('```');
+    detailedOutput.push('');
+    detailedOutput.push('---\n');
+  }
+
+  // Multi-turn results with full details
+  if (report.multiTurnResults.length > 0) {
+    detailedOutput.push('## Multi-Turn Tests\n');
+    for (const result of report.multiTurnResults) {
+      detailedOutput.push(`### ${result.testId} ${result.passed ? '✓' : '✗'}`);
+      if (result.llmScores) {
+        detailedOutput.push(`**LLM Judge:** F${result.llmScores.faithfulness}/R${result.llmScores.relevance}/C${result.llmScores.completeness}/A${result.llmScores.citationAccuracy}`);
+      }
+      detailedOutput.push('');
+      detailedOutput.push('**Initial Query:**');
+      detailedOutput.push(`> ${result.initialQuery}`);
+      detailedOutput.push('');
+      detailedOutput.push('**Initial Response:**');
+      detailedOutput.push('```');
+      detailedOutput.push(result.fullInitialResponse || result.initialResponse);
+      detailedOutput.push('```');
+      detailedOutput.push('');
+      detailedOutput.push('**Follow-Up Query:**');
+      detailedOutput.push(`> ${result.followUp}`);
+      detailedOutput.push('');
+      detailedOutput.push('**Follow-Up Response:**');
+      detailedOutput.push('```');
+      detailedOutput.push(result.fullFollowUpResponse || result.followUpResponse);
+      detailedOutput.push('```');
+      detailedOutput.push('');
+      detailedOutput.push('---\n');
+    }
+  }
+
+  const detailedPath = path.join(process.cwd(), 'eval', 'detailed_output.md');
+  await fs.writeFile(detailedPath, detailedOutput.join('\n'));
+  console.log(`Detailed output saved to: ${detailedPath}`);
 }
 
 main().catch(error => {
