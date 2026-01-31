@@ -1,6 +1,7 @@
 import 'dotenv/config';
-import { embed, tool } from 'ai';
+import { embed, rerank, tool } from 'ai';
 import { openai } from '@ai-sdk/openai';
+import { cohere } from '@ai-sdk/cohere';
 import { z } from 'zod';
 import { getVectorStore } from '../vectorStore/index.js';
 import { loadConfig } from '../config.js';
@@ -9,7 +10,7 @@ import type { RetrievalResult } from '../types.js';
 /**
  * Format retrieval results with citations for LLM context
  */
-function formatResults(results: RetrievalResult[]): Array<{
+function formatResults(results: Array<{ text: string; metadata: RetrievalResult['metadata']; score: number }>): Array<{
   citation: string;
   content: string;
   score: number;
@@ -19,6 +20,45 @@ function formatResults(results: RetrievalResult[]): Array<{
     content: r.text,
     score: r.score,
   }));
+}
+
+/**
+ * Rerank results using Cohere's cross-encoder model
+ */
+async function rerankResults(
+  query: string,
+  results: RetrievalResult[],
+  topK: number,
+  model: string
+): Promise<Array<{ text: string; metadata: RetrievalResult['metadata']; score: number }>> {
+  if (results.length === 0) {
+    return [];
+  }
+
+  // Prepare documents for reranking
+  const documents = results.map(r => ({
+    text: r.text,
+    id: r.id,
+    metadata: r.metadata,
+  }));
+
+  // Rerank using Cohere
+  const { ranking } = await rerank({
+    model: cohere.reranking(model),
+    query,
+    documents: documents.map(d => d.text),
+    topN: topK,
+  });
+
+  // Map back to original documents with new scores
+  return ranking.map(ranked => {
+    const original = documents[ranked.originalIndex];
+    return {
+      text: original.text,
+      metadata: original.metadata,
+      score: ranked.score,
+    };
+  });
 }
 
 /**
@@ -36,21 +76,44 @@ export async function createRetrievalTool() {
       topK: z.number().optional().default(5).describe('Number of results to return'),
     }),
     execute: async ({ query, docType, topK }) => {
+      const finalTopK = topK || config.retrieval.top_k;
+      const rerankConfig = config.retrieval.rerank;
+
       // Embed the query
       const { embedding } = await embed({
         model: openai.embedding(config.embedding.model),
         value: query,
       });
 
+      // Determine how many candidates to fetch
+      const fetchK = rerankConfig.enabled
+        ? finalTopK * rerankConfig.over_fetch_multiplier
+        : finalTopK;
+
       // Search vector store
       const results = await vectorStore.query(
         embedding,
-        topK || config.retrieval.top_k,
+        fetchK,
         docType ? { docType } : undefined
       );
 
-      // Format for LLM context
-      return formatResults(results);
+      // Apply reranking if enabled
+      if (rerankConfig.enabled && results.length > 0) {
+        const reranked = await rerankResults(
+          query,
+          results,
+          finalTopK,
+          rerankConfig.model
+        );
+        return formatResults(reranked);
+      }
+
+      // Format for LLM context (no reranking)
+      return formatResults(results.slice(0, finalTopK).map(r => ({
+        text: r.text,
+        metadata: r.metadata,
+        score: r.score,
+      })));
     },
   });
 }
@@ -60,10 +123,13 @@ export async function createRetrievalTool() {
  */
 export async function retrieveChunks(
   query: string,
-  options?: { docType?: string; topK?: number }
+  options?: { docType?: string; topK?: number; skipRerank?: boolean }
 ): Promise<Array<{ citation: string; content: string; score: number }>> {
   const config = await loadConfig();
   const vectorStore = await getVectorStore();
+  const finalTopK = options?.topK || config.retrieval.top_k;
+  const rerankConfig = config.retrieval.rerank;
+  const shouldRerank = rerankConfig.enabled && !options?.skipRerank;
 
   // Embed the query
   const { embedding } = await embed({
@@ -71,14 +137,34 @@ export async function retrieveChunks(
     value: query,
   });
 
+  // Determine how many candidates to fetch
+  const fetchK = shouldRerank
+    ? finalTopK * rerankConfig.over_fetch_multiplier
+    : finalTopK;
+
   // Search vector store
   const results = await vectorStore.query(
     embedding,
-    options?.topK || config.retrieval.top_k,
+    fetchK,
     options?.docType ? { docType: options.docType } : undefined
   );
 
-  return formatResults(results);
+  // Apply reranking if enabled
+  if (shouldRerank && results.length > 0) {
+    const reranked = await rerankResults(
+      query,
+      results,
+      finalTopK,
+      rerankConfig.model
+    );
+    return formatResults(reranked);
+  }
+
+  return formatResults(results.slice(0, finalTopK).map(r => ({
+    text: r.text,
+    metadata: r.metadata,
+    score: r.score,
+  })));
 }
 
 // Test the retriever when run directly

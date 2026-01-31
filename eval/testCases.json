@@ -22,24 +22,24 @@
   },
   {
     "id": "tc-004",
-    "query": "Is liability capped in the NDA?",
+    "query": "Is liability capped for breach of confidentiality?",
     "expectedChunks": ["nda-s4"],
-    "shouldContain": ["no", "not"],
+    "shouldContain": ["no", "not", "unlimited"],
     "expectRiskFlag": true,
     "category": "risk-detection"
   },
   {
     "id": "tc-005",
-    "query": "What is the data breach notification timeline?",
+    "query": "Which agreement governs data breach notification timelines?",
     "expectedChunks": ["dpa-s3"],
-    "shouldContain": ["72 hours"],
+    "shouldContain": ["DPA", "Data Processing", "72 hours"],
     "category": "simple-retrieval"
   },
   {
     "id": "tc-006",
-    "query": "Can Vendor XYZ use subprocessors?",
-    "expectedChunks": ["dpa-s4"],
-    "shouldContain": ["authorization", "written"],
+    "query": "Can Vendor XYZ share Acme's confidential data with subcontractors?",
+    "expectedChunks": ["dpa-s4", "nda-s2"],
+    "shouldContain": ["authorization", "written", "consent"],
     "category": "simple-retrieval"
   },
   {
@@ -283,5 +283,37 @@
     "shouldContain": ["cannot", "unable", "advice"],
     "shouldRefuse": true,
     "category": "adversarial"
+  },
+  {
+    "id": "tc-040",
+    "query": "Is Vendor XYZ's liability capped for data breaches?",
+    "expectedChunks": ["dpa-s5", "vsa-s4"],
+    "shouldContain": ["DPA", "liability", "cap"],
+    "expectRiskFlag": true,
+    "category": "risk-detection"
+  },
+  {
+    "id": "tc-041",
+    "query": "Are there any legal risks related to liability exposure?",
+    "expectedChunks": ["nda-s4", "vsa-s4", "dpa-s5"],
+    "shouldContain": ["liability", "risk", "unlimited"],
+    "expectRiskFlag": true,
+    "category": "risk-detection"
+  },
+  {
+    "id": "tc-042",
+    "query": "Identify any clauses that could pose financial risk to Acme Corp.",
+    "expectedChunks": ["nda-s4", "sla-s2", "vsa-s4"],
+    "shouldContain": ["liability", "financial", "risk"],
+    "expectRiskFlag": true,
+    "category": "risk-detection"
+  },
+  {
+    "id": "tc-043",
+    "query": "Is there any unlimited liability in these agreements?",
+    "expectedChunks": ["nda-s4"],
+    "shouldContain": ["NDA", "unlimited", "no cap"],
+    "expectRiskFlag": true,
+    "category": "risk-detection"
   }
 ]

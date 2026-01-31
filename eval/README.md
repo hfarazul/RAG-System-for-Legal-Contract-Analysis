@@ -47,12 +47,12 @@
 
 ## Test Cases
 
-Total: **39 test cases**
+Total: **43 test cases**
 
 | Category | Count | Examples |
 |----------|-------|----------|
 | Simple Retrieval | 11 | "What is the uptime commitment?" |
-| Risk Detection | 8 | "Is liability capped in the NDA?", "Is Acme exposed to unlimited liability?" |
+| Risk Detection | 12 | "Is liability capped for breach of confidentiality?", "Is Acme exposed to unlimited liability?" |
 | Cross-Document | 6 | "Are there conflicting governing laws?", "Compare termination notice periods" |
 | Out-of-Scope | 4 | "Can you draft a better NDA?", "Should Acme sign this contract?" |
 | Edge Cases | 6 | "liabiity cap?" (typo), "Liability?" (minimal query) |

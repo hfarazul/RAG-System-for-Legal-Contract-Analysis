@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.32",
+    "@ai-sdk/cohere": "^3.0.16",
     "@ai-sdk/openai": "^3.0.23",
     "@ai-sdk/react": "^3.0.64",
     "ai": "^6.0.62",

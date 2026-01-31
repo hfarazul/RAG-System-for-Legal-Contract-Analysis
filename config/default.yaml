@@ -11,7 +11,11 @@ llm:
 
 retrieval:
   top_k: 5
-  rerank: false
+  rerank:
+    enabled: true
+    provider: cohere
+    model: rerank-v3.5
+    over_fetch_multiplier: 4
 
 chunking:
   strategy: section-based

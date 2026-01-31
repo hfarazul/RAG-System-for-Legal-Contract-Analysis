@@ -14,8 +14,9 @@
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.0.0",
+    "@ai-sdk/cohere": "^3.0.16",
     "@ai-sdk/openai": "^1.0.0",
-    "ai": "^4.0.0",
+    "ai": "^6.0.64",
     "dotenv": "^17.2.3",
     "yaml": "^2.3.0",
     "zod": "^3.22.0"

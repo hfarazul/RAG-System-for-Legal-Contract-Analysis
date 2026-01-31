@@ -94,7 +94,12 @@ export interface Config {
   };
   retrieval: {
     top_k: number;
-    rerank: boolean;
+    rerank: {
+      enabled: boolean;
+      provider: string;
+      model: string;
+      over_fetch_multiplier: number;
+    };
   };
   chunking: {
     strategy: string;
