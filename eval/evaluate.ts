@@ -91,7 +91,7 @@ async function evaluateRetrieval(testCases: TestCase[]): Promise<RetrievalResult
   for (const tc of retrievalTests) {
     process.stdout.write(`  ${tc.id}: `);
 
-    const retrieved = await retrieveChunks(tc.query, { topK: 5, skipRerank: true });
+    const retrieved = await retrieveChunks(tc.query!, { topK: 5, skipRerank: true });
     const retrievedIds = retrieved.map(r => {
       // Extract chunk ID from citation, e.g., "[Non-Disclosure Agreement, Section 3: Term and Termination]" -> "nda-s3"
       const match = r.citation.match(/\[(.+?), Section (\d+)/);
@@ -120,7 +120,7 @@ async function evaluateRetrieval(testCases: TestCase[]): Promise<RetrievalResult
 
     results.push({
       testId: tc.id,
-      query: tc.query,
+      query: tc.query!,
       expectedChunks: tc.expectedChunks!,
       retrievedChunks: retrievedIds,
       precision,
@@ -186,7 +186,7 @@ async function evaluateAnswers(testCases: TestCase[], useLlmJudge: boolean = tru
 
     results.push({
       testId: tc.id,
-      query: tc.query,
+      query: tc.query!,
       response: response.slice(0, 500) + (response.length > 500 ? '...' : ''),
       fullResponse: response,
       context,

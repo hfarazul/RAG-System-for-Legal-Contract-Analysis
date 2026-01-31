@@ -64,7 +64,7 @@ export async function judgeResponse(
       model: openai('gpt-4o'),
       prompt,
       temperature: 0,
-      maxTokens: 256,
+      maxOutputTokens: 256,
     });
 
     // Parse JSON response

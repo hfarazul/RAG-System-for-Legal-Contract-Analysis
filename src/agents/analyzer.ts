@@ -72,7 +72,7 @@ export class AnalyzerAgent {
       },
       stopWhen: stepCountIs(5),
       temperature: this.temperature,
-      maxTokens: this.maxTokens,
+      maxOutputTokens: this.maxTokens,
     });
 
     // Return async generator that also saves to history
@@ -113,7 +113,7 @@ export class AnalyzerAgent {
       },
       stopWhen: stepCountIs(5),
       temperature: this.temperature,
-      maxTokens: this.maxTokens,
+      maxOutputTokens: this.maxTokens,
     });
 
     // Extract text from all steps (result.text may be empty if only tools were called)

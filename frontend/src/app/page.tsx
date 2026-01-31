@@ -23,6 +23,7 @@ export default function ChatPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const initialized = useRef(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const conversationsRef = useRef<Conversation[]>([]);
 
   const { messages, sendMessage, status, error, setMessages } = useChat();
 
@@ -58,11 +59,16 @@ export default function ChatPage() {
     }
   }, [setMessages]);
 
+  // Keep ref in sync with conversations state
+  useEffect(() => {
+    conversationsRef.current = conversations;
+  }, [conversations]);
+
   // Save messages when they change
   useEffect(() => {
     if (activeConversationId && messages.length > 0) {
       // Generate title from first user message if not set
-      const conv = conversations.find(c => c.id === activeConversationId);
+      const conv = conversationsRef.current.find(c => c.id === activeConversationId);
       const firstUserMessage = messages.find(m => m.role === 'user');
 
       const updates: Partial<Conversation> = { messages };
@@ -85,7 +91,7 @@ export default function ChatPage() {
         )
       );
     }
-  }, [messages, activeConversationId, conversations]);
+  }, [messages, activeConversationId]);
 
   const handleNewConversation = useCallback(() => {
     const newConv = createConversation();
