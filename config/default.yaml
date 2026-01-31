@@ -12,7 +12,7 @@ llm:
 retrieval:
   top_k: 5
   rerank:
-    enabled: true
+    enabled: false  # Disabled for eval (Cohere trial rate limit: 10/min)
     provider: cohere
     model: rerank-v3.5
     over_fetch_multiplier: 4
