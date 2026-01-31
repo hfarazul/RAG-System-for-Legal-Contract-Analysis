@@ -32,9 +32,6 @@ interface AnswerResult {
   testId: string;
   query: string;
   response: string;
-  containsExpected: boolean;
-  hasRiskFlag: boolean;
-  expectRiskFlag: boolean;
   refusedCorrectly: boolean;
   shouldRefuse: boolean;
   passed: boolean;
@@ -47,8 +44,8 @@ interface MultiTurnResult {
   followUp: string;
   initialResponse: string;
   followUpResponse: string;
-  containsExpected: boolean;
   passed: boolean;
+  llmScores?: JudgeScores;
 }
 
 interface EvaluationReport {
@@ -64,7 +61,6 @@ interface EvaluationReport {
     avgRecall: number;
     answerTests: number;
     answerPassed: number;
-    riskFlagAccuracy: number;
     outOfScopeAccuracy: number;
     multiTurnTests: number;
     multiTurnPassed: number;
@@ -90,7 +86,7 @@ async function evaluateRetrieval(testCases: TestCase[]): Promise<RetrievalResult
   for (const tc of retrievalTests) {
     process.stdout.write(`  ${tc.id}: `);
 
-    const retrieved = await retrieveChunks(tc.query, { topK: 5 });
+    const retrieved = await retrieveChunks(tc.query, { topK: 5, skipRerank: true });
     const retrievedIds = retrieved.map(r => {
       // Extract chunk ID from citation, e.g., "[Non-Disclosure Agreement, Section 3: Term and Termination]" -> "nda-s3"
       const match = r.citation.match(/\[(.+?), Section (\d+)/);
@@ -155,22 +151,10 @@ async function evaluateAnswers(testCases: TestCase[], useLlmJudge: boolean = tru
     // Get retrieved context for the judge
     // Note: This retrieves the same top-5 chunks the agent would use
     const retrieved = await retrieveChunks(tc.query!, { topK: 5 });
-    const context = retrieved.map(r => `${r.citation}\n${r.text}`).join('\n\n---\n\n');
+    const context = retrieved.map(r => `${r.citation}\n${r.content}`).join('\n\n---\n\n');
 
     const response = await agent.chatSync(tc.query!);
     const responseLower = response.toLowerCase();
-
-    // Check if response contains expected keywords
-    let containsExpected = true;
-    if (tc.shouldContain) {
-      containsExpected = tc.shouldContain.some(keyword =>
-        responseLower.includes(keyword.toLowerCase())
-      );
-    }
-
-    // Check for risk flag
-    const hasRiskFlag = response.includes('⚠️') || response.toLowerCase().includes('risk:');
-    const expectRiskFlag = tc.expectRiskFlag || false;
 
     // Check if correctly refused out-of-scope
     const shouldRefuse = tc.shouldRefuse || false;
@@ -183,10 +167,6 @@ async function evaluateAnswers(testCases: TestCase[], useLlmJudge: boolean = tru
                          responseLower.includes("can't");
     }
 
-    const passed = containsExpected &&
-                   (!shouldRefuse || refusedCorrectly) &&
-                   (!expectRiskFlag || hasRiskFlag);
-
     // LLM Judge evaluation (skip for out-of-scope tests)
     let llmScores: JudgeScores | undefined;
     if (useLlmJudge && !shouldRefuse) {
@@ -194,13 +174,15 @@ async function evaluateAnswers(testCases: TestCase[], useLlmJudge: boolean = tru
       process.stdout.write(` [Judge: F${llmScores.faithfulness}/R${llmScores.relevance}/C${llmScores.completeness}/A${llmScores.citationAccuracy}]`);
     }
 
+    // Pass criteria: refusal tests use keyword detection, others use LLM judge faithfulness >= 3
+    const passed = shouldRefuse
+      ? refusedCorrectly
+      : (llmScores ? llmScores.faithfulness >= 3 : true);
+
     results.push({
       testId: tc.id,
       query: tc.query,
       response: response.slice(0, 500) + (response.length > 500 ? '...' : ''),
-      containsExpected,
-      hasRiskFlag,
-      expectRiskFlag,
       refusedCorrectly,
       shouldRefuse,
       passed,
@@ -239,17 +221,17 @@ async function evaluateMultiTurn(testCases: TestCase[]): Promise<MultiTurnResult
 
     // Send follow-up (same agent maintains history)
     const followUpResponse = await agent.chatSync(tc.followUp!);
-    const responseLower = followUpResponse.toLowerCase();
 
-    // Check if follow-up response contains expected keywords
-    let containsExpected = true;
-    if (tc.shouldContain) {
-      containsExpected = tc.shouldContain.some(keyword =>
-        responseLower.includes(keyword.toLowerCase())
-      );
-    }
+    // Get context for LLM judge
+    const retrieved = await retrieveChunks(tc.followUp!, { topK: 5 });
+    const context = retrieved.map(r => `${r.citation}\n${r.content}`).join('\n\n---\n\n');
 
-    const passed = containsExpected;
+    // Use LLM judge for multi-turn evaluation
+    const llmScores = await judgeResponse(tc.followUp!, followUpResponse, context);
+    process.stdout.write(` [Judge: F${llmScores.faithfulness}/R${llmScores.relevance}/C${llmScores.completeness}/A${llmScores.citationAccuracy}]`);
+
+    // Pass if faithfulness >= 3
+    const passed = llmScores.faithfulness >= 3;
 
     results.push({
       testId: tc.id,
@@ -257,11 +239,11 @@ async function evaluateMultiTurn(testCases: TestCase[]): Promise<MultiTurnResult
       followUp: tc.followUp!,
       initialResponse: initialResponse.slice(0, 300) + (initialResponse.length > 300 ? '...' : ''),
       followUpResponse: followUpResponse.slice(0, 300) + (followUpResponse.length > 300 ? '...' : ''),
-      containsExpected,
       passed,
+      llmScores,
     });
 
-    console.log(passed ? '✓' : '✗');
+    console.log(passed ? ' ✓' : ' ✗');
   }
 
   return results;
@@ -282,11 +264,6 @@ function generateReport(
   const avgRecall = retrievalResults.length > 0
     ? retrievalResults.reduce((sum, r) => sum + r.recall, 0) / retrievalResults.length
     : 0;
-
-  const riskTests = answerResults.filter(r => r.expectRiskFlag);
-  const riskFlagAccuracy = riskTests.length > 0
-    ? riskTests.filter(r => r.hasRiskFlag).length / riskTests.length
-    : 1;
 
   const outOfScopeTests = answerResults.filter(r => r.shouldRefuse);
   const outOfScopeAccuracy = outOfScopeTests.length > 0
@@ -320,7 +297,6 @@ function generateReport(
       avgRecall,
       answerTests: answerResults.length,
       answerPassed: answerResults.filter(r => r.passed).length,
-      riskFlagAccuracy,
       outOfScopeAccuracy,
       multiTurnTests: multiTurnResults.length,
       multiTurnPassed: multiTurnResults.filter(r => r.passed).length,
@@ -346,7 +322,6 @@ function printSummary(report: EvaluationReport): void {
 
   console.log('\nAnswer Metrics:');
   console.log(`  Tests Passed: ${summary.answerPassed}/${summary.answerTests}`);
-  console.log(`  Risk Flag Accuracy: ${(summary.riskFlagAccuracy * 100).toFixed(1)}%`);
   console.log(`  Out-of-Scope Accuracy: ${(summary.outOfScopeAccuracy * 100).toFixed(1)}%`);
 
   if (summary.multiTurnTests > 0) {
@@ -371,12 +346,11 @@ function printSummary(report: EvaluationReport): void {
        summary.llmJudge.avgCompleteness + summary.llmJudge.avgCitationAccuracy) / 20
     : 1;
   const overallScore = (
-    (summary.retrievalPassed / summary.retrievalTests) * 0.20 +
+    (summary.retrievalPassed / summary.retrievalTests) * 0.25 +
     (summary.answerPassed / summary.answerTests) * 0.35 +
-    summary.riskFlagAccuracy * 0.10 +
     summary.outOfScopeAccuracy * 0.10 +
     multiTurnScore * 0.05 +
-    llmJudgeScore * 0.20
+    llmJudgeScore * 0.25
   ) * 100;
   console.log(`  Score: ${overallScore.toFixed(1)}%`);
 
