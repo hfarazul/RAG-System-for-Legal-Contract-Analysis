@@ -132,7 +132,7 @@
   {
     "id": "tc-019",
     "query": "Summarize all risks for Acme Corp in one paragraph.",
-    "expectedChunks": ["nda-s4", "vsa-s4", "sla-s2", "dpa-s5"],
+    "expectedChunks": ["nda-s4", "vsa-s4", "sla-s4", "dpa-s5"],
     "shouldContain": ["liability", "risk"],
     "expectRiskFlag": true,
     "category": "cross-document"
@@ -198,7 +198,7 @@
   {
     "id": "tc-028",
     "query": "How do liability caps differ across documents?",
-    "expectedChunks": ["nda-s4", "vsa-s4", "dpa-s5"],
+    "expectedChunks": ["nda-s4", "vsa-s4", "sla-s4", "dpa-s5"],
     "shouldContain": ["NDA", "VSA", "liability"],
     "expectRiskFlag": true,
     "category": "cross-document"
@@ -303,7 +303,7 @@
   {
     "id": "tc-042",
     "query": "Identify any clauses that could pose financial risk to Acme Corp.",
-    "expectedChunks": ["nda-s4", "sla-s2", "vsa-s4"],
+    "expectedChunks": ["nda-s4", "sla-s4", "vsa-s4"],
     "shouldContain": ["liability", "financial", "risk"],
     "expectRiskFlag": true,
     "category": "risk-detection"
