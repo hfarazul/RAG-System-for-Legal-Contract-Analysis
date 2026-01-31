@@ -37,11 +37,3 @@ export async function getAnalyzerPrompt(): Promise<string> {
   const config = await loadConfig();
   return loadPrompt(config.prompts.analyzer);
 }
-
-/**
- * Get the risk assessor prompt
- */
-export async function getRiskAssessorPrompt(): Promise<string> {
-  const config = await loadConfig();
-  return loadPrompt(config.prompts.risk_assessor);
-}

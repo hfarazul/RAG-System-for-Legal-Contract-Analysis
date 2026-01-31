@@ -27,4 +27,3 @@ vector_store:
 
 prompts:
   analyzer: ./config/prompts/analyzer.txt
-  risk_assessor: ./config/prompts/risk-assessor.txt

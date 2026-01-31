@@ -111,7 +111,6 @@ export interface Config {
   };
   prompts: {
     analyzer: string;
-    risk_assessor: string;
   };
 }
 

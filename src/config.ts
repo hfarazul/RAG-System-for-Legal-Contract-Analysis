@@ -36,14 +36,6 @@ export async function getAnalyzerPrompt(): Promise<string> {
   return loadPrompt(config.prompts.analyzer);
 }
 
-/**
- * Get the risk assessor prompt
- */
-export async function getRiskAssessorPrompt(): Promise<string> {
-  const config = await loadConfig();
-  return loadPrompt(config.prompts.risk_assessor);
-}
-
 // Test the config loader when run directly
 if (import.meta.url === `file://${process.argv[1]}`) {
   console.log('Testing config loader...\n');
@@ -56,10 +48,6 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.log('\n--- Analyzer Prompt ---');
     const analyzerPrompt = await getAnalyzerPrompt();
     console.log(analyzerPrompt.slice(0, 200) + '...');
-
-    console.log('\n--- Risk Assessor Prompt ---');
-    const riskPrompt = await getRiskAssessorPrompt();
-    console.log(riskPrompt.slice(0, 200) + '...');
 
     console.log('\n✓ Config test passed!');
   } catch (error) {
