@@ -215,6 +215,7 @@ async function evaluateMultiTurn(testCases: TestCase[]): Promise<MultiTurnResult
     process.stdout.write(`  ${tc.id}: `);
 
     const agent = await getAnalyzerAgent();
+    agent.clearHistory();  // Clear history from previous tests
 
     // Send initial query
     const initialResponse = await agent.chatSync(tc.initialQuery!);

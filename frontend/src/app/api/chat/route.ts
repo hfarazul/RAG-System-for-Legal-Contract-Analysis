@@ -6,17 +6,17 @@ import { getAnalyzerPrompt, loadConfig } from '@/lib/config';
 
 export const maxDuration = 60;
 
-// Input validation schema
+// Input validation schema - lenient to accept all message part types (text, tool-invocation, tool-result, etc.)
 const MessagePartSchema = z.object({
-  type: z.literal('text'),
-  text: z.string().max(10000, 'Message too long'),
-});
+  type: z.string(),
+  text: z.string().max(10000, 'Message too long').optional(),
+}).passthrough();
 
 const MessageSchema = z.object({
   id: z.string(),
   role: z.enum(['user', 'assistant', 'system']),
   parts: z.array(MessagePartSchema),
-});
+}).passthrough();
 
 const RequestBodySchema = z.object({
   messages: z.array(MessageSchema).max(100, 'Too many messages'),

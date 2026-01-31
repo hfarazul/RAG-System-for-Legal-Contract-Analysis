@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { streamText, generateText } from 'ai';
+import { streamText, generateText, stepCountIs } from 'ai';
 import { anthropic } from '@ai-sdk/anthropic';
 import { getAnalyzerPrompt, loadConfig } from '../config.js';
 import { createRetrievalTool } from '../retrieval/retriever.js';
@@ -70,7 +70,7 @@ export class AnalyzerAgent {
       tools: {
         retrieveChunks: this.retrievalTool,
       },
-      maxSteps: 5,
+      stopWhen: stepCountIs(5),
       temperature: this.temperature,
       maxTokens: this.maxTokens,
     });
@@ -111,13 +111,22 @@ export class AnalyzerAgent {
       tools: {
         retrieveChunks: this.retrievalTool,
       },
-      maxSteps: 5,
+      stopWhen: stepCountIs(5),
       temperature: this.temperature,
       maxTokens: this.maxTokens,
     });
 
+    // Extract text from all steps (result.text may be empty if only tools were called)
+    // Concatenate text from all steps to get the full response
+    let responseText = result.text || '';
+    if (!responseText && result.steps) {
+      responseText = result.steps
+        .map(step => step.text || '')
+        .filter(Boolean)
+        .join('\n\n');
+    }
+
     // Save assistant response to history (only if non-empty)
-    const responseText = result.text || '';
     if (responseText) {
       this.conversationHistory.push({ role: 'assistant', content: responseText });
     }
