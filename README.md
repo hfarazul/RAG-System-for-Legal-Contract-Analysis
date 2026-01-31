@@ -1,6 +1,6 @@
-# Legal Contract Analysis - Multi-Agent RAG System
+# Legal Contract Analysis - RAG System
 
-A CLI-based RAG system for analyzing legal contracts with citations and automatic risk flagging.
+A RAG system for analyzing legal contracts with citations and automatic risk flagging. Supports both CLI and Web UI.
 
 ## Problem Overview
 
@@ -19,7 +19,7 @@ The system analyzes NDAs, Vendor Agreements, Service Level Agreements, and Data 
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                         CLI Interface                            │
+│                      CLI / Web Interface                         │
 │                    (Multi-turn Conversation)                     │
 └─────────────────────────────────┬───────────────────────────────┘
                                   │
@@ -30,34 +30,23 @@ The system analyzes NDAs, Vendor Agreements, Service Level Agreements, and Data 
 │  • Answers questions with citations                              │
 │  • Proactively flags risks                                       │
 │  • Cross-references documents                                    │
-│  • Maintains conversation context                                │
 │                                                                  │
-│  ┌─────────────────────────────────────────────────────────┐    │
-│  │                   Tools Available                        │    │
-│  │                                                          │    │
-│  │  retrieveChunks(query, docType?, topK?)                 │    │
-│  │    → Semantic search over contract sections              │    │
-│  └─────────────────────────────────────────────────────────┘    │
+│  Tool: retrieveChunks(query, docType?, topK?)                   │
 └─────────────────────────────────┬───────────────────────────────┘
                                   │
                                   ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                      Retrieval Layer                             │
-│                                                                  │
-│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐       │
-│  │ Query Embed  │───▶│ Vector Store │───▶│   Top-K      │       │
-│  │  (OpenAI)    │    │  (In-Memory) │    │   Results    │       │
-│  └──────────────┘    └──────────────┘    └──────────────┘       │
-└─────────────────────────────────────────────────────────────────┘
+│  Query Embed (OpenAI) → Vector Search → Rerank (Cohere)         │
+└─────────────────────────────────┬───────────────────────────────┘
                                   │
                                   ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                    Document Corpus                               │
-│                                                                  │
-│   NDA (5 sections)  │  VSA (6 sections)  │  SLA (4 sections)    │
-│   DPA (6 sections)  │  Total: 21 chunks                         │
+│              In-Memory Vector Store + JSON Persistence           │
 └─────────────────────────────────────────────────────────────────┘
 ```
+
+**Key**: Agent can call retrieval tool **multiple times** until it has all information (agentic loop with `maxSteps: 5`)
 
 ### RAG Pipeline
 
@@ -75,24 +64,30 @@ Ingestion: Documents → Section-based chunks → 1536-dim vectors → vectors.j
 We chose a **single agent with tools** architecture instead of separate specialized agents:
 
 ```
-❌ Original Plan (Rejected):
+Multi-Agent (Considered):
    ┌─────────────┐     ┌─────────────┐
    │  Analyzer   │     │    Risk     │
    │   Agent     │     │  Assessor   │
    └─────────────┘     └─────────────┘
-   (User must explicitly ask for risks)
+   Adds coordination overhead
 
-✅ Final Design (Implemented):
+Single Agent (Implemented):
    ┌─────────────────────────────────┐
    │         Analyzer Agent          │
    │  • Q&A with citations           │
    │  • Proactive risk flagging      │
    │  • Cross-document analysis      │
    └─────────────────────────────────┘
-   (Risks flagged automatically when relevant)
+   Unified context, no handoff losses
 ```
 
-**Why?** The requirement states "risk indicators **where applicable**" - risks should appear automatically, not require explicit user requests.
+**Why Single Agent?**
+| Reason | Explanation |
+|--------|-------------|
+| **No parallelizable subtasks** | All operations use same retrieved context |
+| **Avoids context fragmentation** | Multi-agent loses context at handoffs |
+| **Token efficiency** | Multi-agent uses 3-10x more tokens (Anthropic) |
+| **Simpler debugging** | One prompt surface vs. multiple agents |
 
 ---
 
@@ -108,7 +103,7 @@ We chose a **single agent with tools** architecture instead of separate speciali
 
 | Choice | Alternative | Rationale |
 |--------|-------------|-----------|
-| **text-embedding-3-small** | text-embedding-3-large | 5x cheaper with only 2% quality difference. 1536 dimensions provide good precision. For 21 chunks, we optimized for simplicity over marginal quality gains. |
+| **text-embedding-3-small** | text-embedding-3-large, Cohere, Voyage | At 21 chunks, all models perform equivalently — quality differences are negligible at this scale. Cheapest option (5-6x cheaper) with simplest integration (native Vercel AI SDK support). |
 
 ### 3. LLM: Claude Sonnet (Anthropic)
 
@@ -128,11 +123,11 @@ We chose a **single agent with tools** architecture instead of separate speciali
 |--------|-------------|-----------|
 | **Single agent** | Separate Analyzer + Risk Assessor | Avoids over-agentification. Risk flagging integrated into main agent enables proactive detection without requiring explicit user requests. Simpler conversation flow. |
 
-### 6. Retrieval: Pure Semantic Search
+### 6. Retrieval: Semantic Search + Reranking
 
 | Choice | Alternative | Rationale |
 |--------|-------------|-----------|
-| **Cosine similarity** | Hybrid (BM25 + semantic) | Simpler implementation, sufficient for small corpus. Trade-off: may miss exact keyword matches like "72 hours". Hybrid search would be a production enhancement. |
+| **Cosine similarity + Cohere rerank** | Hybrid (BM25 + semantic) | Two-stage retrieval: vector search (top 20) → cross-encoder reranking (top 5). Trade-off: may miss exact keyword matches like "72 hours". Hybrid search would be a production enhancement. |
 
 ---
 
@@ -144,7 +139,6 @@ We chose a **single agent with tools** architecture instead of separate speciali
 
 ### 2. Retrieval Limitations
 - **No Hybrid Search**: Pure semantic search may miss exact terms like "72 hours" or "99.5%". BM25 + semantic would improve precision.
-- **No Reranking**: Results ordered by cosine similarity only. Cohere reranker could improve relevance.
 
 ### 3. Agent Limitations
 - **No Confidence Scores**: Agent doesn't indicate certainty level of answers.
@@ -152,10 +146,9 @@ We chose a **single agent with tools** architecture instead of separate speciali
 - **Hallucination Risk**: Despite grounding, LLM may occasionally infer beyond retrieved context.
 
 ### 4. Evaluation Limitations
-- **Small Test Set**: 15 test cases can't cover all edge cases.
-- **LLM-as-Judge Bias**: Claude evaluating Claude may be lenient.
-- **No Adversarial Testing**: Not tested against prompt injection or jailbreaks.
+- **LLM-as-Judge Bias**: GPT-4o judging Claude may have blind spots.
 - **No Latency Metrics**: Response time not measured.
+- **Single-shot eval**: Evaluation uses single retrieval call, but production uses agentic loop (may underestimate capability).
 
 ### 5. Document Limitations
 - **English Only**: No multi-language support.
@@ -171,6 +164,7 @@ We chose a **single agent with tools** architecture instead of separate speciali
 - npm 9+
 - OpenAI API Key (embeddings)
 - Anthropic API Key (Claude LLM)
+- Cohere API Key (reranking)
 
 ### Installation
 
@@ -183,12 +177,14 @@ cp .env.example .env
 # Edit .env with your API keys:
 #   OPENAI_API_KEY=sk-...
 #   ANTHROPIC_API_KEY=sk-ant-...
+#   COHERE_API_KEY=...
 
 # 3. Run ingestion (one-time)
 npm run ingest
 
-# 4. Start the CLI
-npm run start
+# 4. Start the CLI or Web UI
+npm run start    # CLI
+npm run dev      # Web UI (React)
 ```
 
 ---
@@ -242,17 +238,16 @@ Legal_Contract_Analysis/
 │   │   ├── chunker.ts            # Section-based chunking
 │   │   └── embedder.ts           # OpenAI embeddings
 │   ├── retrieval/
-│   │   └── retriever.ts          # Vector search tool
+│   │   └── retriever.ts          # Vector search + reranking tool
 │   ├── agents/
 │   │   └── analyzer.ts           # Main agent
 │   └── vectorStore/
 │       └── index.ts              # In-memory vector store
+├── frontend/                     # React Web UI
+│   └── ...
 ├── eval/
-│   ├── testCases.json            # 15 evaluation test cases
+│   ├── testCases.json            # 43 evaluation test cases
 │   └── evaluate.ts               # Evaluation script
-├── tests/
-│   ├── test-proactive.ts         # Proactive risk flagging tests
-│   └── test-crossref.ts          # Cross-document reference tests
 └── data/
     ├── *.txt                     # Legal documents
     └── vectors.json              # Generated embeddings
@@ -265,27 +260,30 @@ Legal_Contract_Analysis/
 | Command | Description |
 |---------|-------------|
 | `npm run start` | Start interactive CLI |
+| `npm run dev` | Start Web UI (React) |
 | `npm run ingest` | Run document ingestion |
-| `npm run eval` | Run evaluation suite (15 test cases) |
-| `npm run test:proactive` | Test proactive risk flagging |
-| `npm run test:crossref` | Test cross-document referencing |
+| `npm run eval` | Run evaluation suite (43 test cases) |
 
 ---
 
 ## Evaluation Results
 
-```
-Retrieval Metrics:
-  Tests Passed: 13/13
-  Avg Recall: 100.0%
+| Metric | Result |
+|--------|--------|
+| **Overall Score** | **98.0%** (eval) / **100%** (prod) |
+| Retrieval Tests | 35/35 (100%) |
+| Answer Tests | 40/41 (97.6%) |
+| Out-of-Scope Accuracy | 100% |
+| Adversarial Handling | 100% |
 
-Answer Metrics:
-  Tests Passed: 15/15
-  Risk Flag Accuracy: 100.0%
-  Out-of-Scope Accuracy: 100.0%
+### LLM Judge Scores (GPT-4o)
 
-Overall Score: 100.0%
-```
+| Dimension | Average |
+|-----------|---------|
+| Faithfulness | 4.74/5 |
+| Relevance | 4.89/5 |
+| Completeness | 4.77/5 |
+| Citation Accuracy | 4.71/5 |
 
 ---
 
@@ -294,10 +292,13 @@ Overall Score: 100.0%
 | Component | Technology |
 |-----------|------------|
 | Runtime | Node.js / TypeScript |
+| Frontend | React |
 | Agent Framework | Vercel AI SDK v4 |
 | LLM | Claude Sonnet (Anthropic) |
 | Embeddings | OpenAI `text-embedding-3-small` |
+| Reranking | Cohere `rerank-v3.5` |
 | Vector Store | In-Memory + JSON |
+| Validation | Zod |
 | Config | YAML |
 
 ---
