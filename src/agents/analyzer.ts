@@ -14,6 +14,8 @@ import type { Message } from '../types.js';
  * - Automatic risk flagging
  * - Multi-turn conversation support
  */
+const MAX_HISTORY_LENGTH = 20; // Keep last 20 messages to prevent memory exhaustion
+
 export class AnalyzerAgent {
   private systemPrompt: string = '';
   private model: string = '';
@@ -87,6 +89,11 @@ export class AnalyzerAgent {
 
       // Save assistant response to history
       self.conversationHistory.push({ role: 'assistant', content: fullResponse });
+
+      // Trim history to prevent memory exhaustion
+      if (self.conversationHistory.length > MAX_HISTORY_LENGTH) {
+        self.conversationHistory = self.conversationHistory.slice(-MAX_HISTORY_LENGTH);
+      }
     })();
   }
 
@@ -129,6 +136,11 @@ export class AnalyzerAgent {
     // Save assistant response to history (only if non-empty)
     if (responseText) {
       this.conversationHistory.push({ role: 'assistant', content: responseText });
+
+      // Trim history to prevent memory exhaustion
+      if (this.conversationHistory.length > MAX_HISTORY_LENGTH) {
+        this.conversationHistory = this.conversationHistory.slice(-MAX_HISTORY_LENGTH);
+      }
     }
 
     return responseText;
